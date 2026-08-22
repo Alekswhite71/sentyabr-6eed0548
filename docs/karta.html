@@ -515,7 +515,12 @@ function alongPath(pts, frac){
 let ROUTES = { legs:{} };
 
 function legPoints(a,b){
-  const leg = ROUTES.legs?.[`${a}->${b}`];
+  const key = `${a}->${b}`;
+  // OSRM не знает горный серпантин к Джилы-Су и рисует длинный объезд —
+  // там оставляем прямую как ориентир, не как навигацию
+  if(key==="kislovodsk->dzhilisu" || key==="dzhilisu->kislovodsk")
+    return [ll(a), ll(b)];
+  const leg = ROUTES.legs?.[key];
   if(leg?.points?.length > 1) return leg.points;
   return [ll(a), ll(b)];
 }

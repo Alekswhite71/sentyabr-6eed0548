@@ -1,6 +1,14 @@
 /* Прогоняет формирование уведомления по всем датам от старта до конца поездки,
    чтобы убедиться, что нигде нет пропусков, дублей и сбоя падежей. */
+import { readFileSync } from "node:fs";
 import { compose } from "./send-push.mjs";
+
+const MEET = new Date(
+  JSON.parse(readFileSync(new URL("../docs/phrases.json", import.meta.url), "utf8")).meet
+);
+
+/** Число «дней», которое в этот момент показывает плитка счётчика на странице. */
+const tileDays = (now) => Math.floor((MEET - now) / 86400000);
 
 const from = new Date("2026-08-22T06:00:00Z"); // 09:00 МСК
 const to = new Date("2026-10-02T06:00:00Z");
@@ -23,6 +31,13 @@ while (d <= to) {
     }
     if (!msg.body || msg.body.length < 8) {
       console.log(`  ⚠ подозрительно короткий текст`);
+      problems++;
+    }
+    // если в заголовке есть число, оно обязано совпасть с плиткой на странице
+    const n = msg.title.match(/(\d+) (?:день|дня|дней)/);
+    const tile = tileDays(d);
+    if (n && tile >= 0 && Number(n[1]) !== tile) {
+      console.log(`  ⚠ в пуше ${n[1]}, а на плитке ${tile}`);
       problems++;
     }
   }

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Мы · сентябрь 2026 · три недели вдвоём</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root{
+    --ink:#2a1520;
+    --ink-soft:#5c3a48;
+    --paper:#fffaf7;
+    --blush:#fdeef0;
+    --rose:#d4677f;
+    --wine:#8e2f4a;
+    --gold:#c9a227;
+    --sand:#f3e3dc;
+    --sea:#2f7f8e;
+    --pine:#3a6b52;
+    --mist:rgba(42,21,32,.5);
+    --shadow:0 20px 60px rgba(42,21,32,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#241019;color:var(--ink);font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+  #map{position:fixed;inset:0;z-index:0;background:#241019}
+  .leaflet-container{background:#241019}
+
+  /* карта чуть теплее и мягче */
+  .leaflet-tile-pane{filter:saturate(.82) contrast(.94) brightness(1.03) sepia(.12)}
+
+  .vignette{position:fixed;inset:0;pointer-events:none;z-index:1;
+    background:radial-gradient(120% 90% at 50% 50%,transparent 45%,rgba(36,16,25,.55) 100%)}
+
+  /* ─── панель ─── */
+  .panel{
+    position:fixed;top:14px;left:14px;z-index:3;
+    width:min(430px,calc(100vw - 28px));
+    max-height:calc(100vh - 28px);
+    display:flex;flex-direction:column;
+    background:rgba(255,250,247,.94);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(212,103,127,.3);
+    border-radius:26px;box-shadow:var(--shadow);overflow:hidden;
+  }
+  .panel.collapsed .panel-body{display:none}
+
+  .hero{padding:20px 22px 14px;position:relative;
+    background:
+      radial-gradient(circle at 88% -10%,rgba(212,103,127,.22),transparent 55%),
+      linear-gradient(180deg,#fff2f4,rgba(255,250,247,0))}
+  .kicker{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);font-weight:800}
+  h1{font-family:"Cormorant Garamond",Georgia,serif;font-size:33px;line-height:1.02;margin:9px 0 7px;font-weight:600;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--wine)}
+  .lede{color:var(--ink-soft);font-size:13px;line-height:1.55}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+  .chip{font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--blush);color:var(--wine);border:1px solid rgba(212,103,127,.22)}
+
+  .fold{position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:50%;
+    border:1px solid rgba(212,103,127,.35);background:#fff;color:var(--wine);
+    font-size:15px;cursor:pointer;display:grid;place-items:center;transition:.2s}
+  .fold:hover{background:var(--blush)}
+
+  .panel-body{display:flex;flex-direction:column;min-height:0}
+
+  .tabs{display:flex;gap:4px;padding:0 14px 10px;background:rgba(255,250,247,.96)}
+  .tab{flex:1;border:0;background:transparent;padding:9px 4px;font:inherit;font-size:11.5px;font-weight:800;
+    color:var(--mist);cursor:pointer;border-bottom:2px solid transparent;transition:.18s;letter-spacing:.01em}
+  .tab.active{color:var(--wine);border-bottom-color:var(--rose)}
+
+  .scroll{overflow:auto;padding:0 14px 16px;min-height:0}
+  .scroll::-webkit-scrollbar{width:8px}
+  .scroll::-webkit-scrollbar-thumb{background:rgba(212,103,127,.3);border-radius:9px}
+  .section{display:none}
+  .section.active{display:block}
+
+  /* ─── цепочка маршрута ─── */
+  .chain{padding-top:2px}
+  .leg-arrow{display:flex;align-items:center;gap:8px;padding:5px 0 5px 22px;color:var(--ink-soft);font-size:11px;font-weight:600}
+  .leg-arrow .v{color:var(--rose);font-size:15px;line-height:1;transform:translateY(-1px)}
+  .leg-arrow b{color:var(--wine);font-weight:800}
+  .leg-arrow.soft{opacity:.75;font-style:italic}
+
+  .stop{width:100%;text-align:left;border:1px solid rgba(42,21,32,.09);background:#fff;
+    border-radius:18px;padding:0;margin:0;cursor:pointer;font:inherit;overflow:hidden;
+    transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;display:block}
+  .stop:hover,.stop.active{transform:translateY(-2px);border-color:rgba(212,103,127,.5);box-shadow:0 10px 26px rgba(142,47,74,.14)}
+  .stop.active{background:linear-gradient(180deg,#fff6f7,#fff)}
+
+  .stop-photo{position:relative;height:104px;background:#e8d8d2 center/cover no-repeat;display:block}
+  .stop-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,21,32,.05),rgba(42,21,32,.5))}
+  /* остановка без фотографии — просто ночёвка в пути */
+  .stop-photo.plain{height:62px;background:linear-gradient(115deg,#6d2438,#8e2f4a 55%,#a8546a)}
+  .stop-photo.plain::after{display:none}
+  .stop-photo.plain .cap .t{font-size:17px}
+  .stop-photo .num{position:absolute;left:10px;top:10px;z-index:2;width:26px;height:26px;border-radius:50%;
+    background:var(--wine);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.3)}
+  .stop-photo .cap{position:absolute;left:12px;right:12px;bottom:9px;z-index:2;color:#fff}
+  .stop-photo .cap .t{display:block;font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:600;line-height:1.15;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+  .stop-photo .cap .d{display:block;font-size:10.5px;font-weight:700;opacity:.92;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+  .stop-txt{padding:10px 13px 12px}
+  .stop-txt p{font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
+  .badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .badge{font-size:10px;font-weight:700;padding:4px 8px;border-radius:8px;background:var(--sand);color:var(--ink-soft)}
+  .badge.love{background:var(--blush);color:var(--wine)}
+  .badge.warn{background:#fbeadf;color:#95521f}
+  .badge.sea{background:#e2f0f2;color:#1e5b66}
+
+  .optional{border-style:dashed;border-color:rgba(47,127,142,.5);background:linear-gradient(180deg,#f2fafb,#fff)}
+  .optional .stop-photo .num{background:var(--sea)}
+
+  /* Курск — знакомство с родителями, вторая по важности точка поездки */
+  .stop.family{border-color:rgba(212,103,127,.55);box-shadow:0 10px 30px rgba(142,47,74,.16)}
+  .stop.family .stop-photo{height:126px}
+  .stop.family .stop-photo .num{background:var(--rose)}
+  .stop.family .stop-txt{background:linear-gradient(180deg,#fff4f6,#fff)}
+  .stop.family .stop-photo .cap .t{font-size:21px}
+
+  .divider{display:flex;align-items:center;gap:9px;margin:16px 0 10px;color:var(--wine)}
+  .divider span{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+  .divider::before,.divider::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(212,103,127,.45),transparent)}
+
+  .note{font-size:12px;line-height:1.6;color:var(--ink-soft);background:var(--blush);
+    border-left:3px solid var(--rose);border-radius:0 12px 12px 0;padding:11px 13px;margin:10px 0}
+  .note b{color:var(--wine)}
+
+  .totals{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 12px}
+  .tot{background:#fff;border:1px solid rgba(42,21,32,.09);border-radius:14px;padding:10px 12px}
+  .tot .k{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
+  .tot .v{font-family:"Cormorant Garamond",serif;font-size:23px;font-weight:600;color:var(--wine);line-height:1.15;margin-top:2px}
+  .tot .s{font-size:10.5px;color:var(--ink-soft)}
+
+  .seaToggle{display:flex;gap:5px;background:var(--sand);padding:4px;border-radius:12px;margin:2px 0 12px}
+  .seaToggle button{flex:1;border:0;background:transparent;font:inherit;font-size:11px;font-weight:800;
+    padding:8px 4px;border-radius:9px;cursor:pointer;color:var(--ink-soft);transition:.18s}
+  .seaToggle button.on{background:#fff;color:var(--wine);box-shadow:0 2px 8px rgba(42,21,32,.1)}
+
+  /* ─── маркеры ─── */
+  .pin{display:grid;place-items:center;border-radius:50%;color:#fff;font-weight:800;
+    font-family:Manrope,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.4);border:2.5px solid #fff}
+  .pin.big{width:32px;height:32px;font-size:13px}
+  .pin.small{width:22px;height:22px;font-size:10px}
+  .pin.heart{background:var(--rose)!important;font-size:15px}
+  .pin.pulse::before{content:"";position:absolute;width:32px;height:32px;border-radius:50%;
+    background:rgba(212,103,127,.55);animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{0%{transform:scale(.85);opacity:.75}100%{transform:scale(2.6);opacity:0}}
+
+  .arrow{color:var(--wine);font-size:16px;line-height:1;text-shadow:0 0 5px rgba(255,255,255,.95),0 0 10px rgba(255,255,255,.8);
+    font-weight:900;pointer-events:none}
+  .arrow.sea{color:var(--sea)}
+
+  .lbl{background:rgba(255,250,247,.93);border:1px solid rgba(212,103,127,.35);border-radius:999px;
+    padding:2px 8px;font-size:10.5px;font-weight:800;color:var(--wine);white-space:nowrap;
+    box-shadow:0 2px 8px rgba(42,21,32,.18);pointer-events:none}
+  .lbl.sea{color:#1e5b66;border-color:rgba(47,127,142,.4)}
+
+  .leaflet-popup-content-wrapper{border-radius:18px;overflow:hidden;padding:0;box-shadow:0 14px 40px rgba(42,21,32,.35)}
+  .leaflet-popup-content{margin:0;width:250px!important}
+  .pop img{width:100%;height:126px;object-fit:cover;display:block}
+  .pop .b{padding:11px 13px 13px}
+  .pop .t{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:600;color:var(--ink);line-height:1.15}
+  .pop .d{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--rose);margin-bottom:3px}
+  .pop p{font-size:12px;line-height:1.5;color:var(--ink-soft);margin-top:6px}
+
+  /* ─── легенда ─── */
+  .legend{position:fixed;right:14px;bottom:14px;z-index:3;background:rgba(255,250,247,.93);
+    backdrop-filter:blur(14px);border:1px solid rgba(212,103,127,.28);border-radius:16px;
+    padding:11px 13px;box-shadow:var(--shadow);font-size:11px;max-width:210px}
+  .legend h4{font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--wine);margin-bottom:7px}
+  .legend div{display:flex;align-items:center;gap:7px;margin-top:5px;color:var(--ink-soft);font-weight:600}
+  .legend i{width:11px;height:11px;border-radius:50%;flex:none;border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .legend .dash{width:20px;height:0;border-top:2.5px dashed var(--sea);border-radius:0;background:none;box-shadow:none}
+
+  .love-line{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:3;
+    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:14px;color:#fff;
+    background:rgba(142,47,74,.72);backdrop-filter:blur(10px);padding:8px 20px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.25);box-shadow:var(--shadow);white-space:nowrap}
+
+  @media (max-width:820px){
+    .panel{width:calc(100vw - 20px);left:10px;top:10px;max-height:calc(100vh - 20px)}
+    h1{font-size:27px}
+    .legend,.love-line{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div class="vignette"></div>
+
+<aside class="panel" id="panel">
+  <div class="hero">
+    <div class="kicker">9 — 29 сентября 2026</div>
+    <h1>Три недели,<br><em>наконец вдвоём</em></h1>
+    <p class="lede">Мы не виделись с мая. Всё начинается в Ростове — и первые сутки там принадлежат только нам двоим. А ближе к концу, в Курске, я знакомлюсь с твоими родителями.</p>
+    <div class="meta">
+      <span class="chip">21 день</span>
+      <span class="chip">на машине</span>
+      <span class="chip" id="chipKm">≈ 3 000 км</span>
+      <span class="chip">Ростов · Эльбрус · Курск</span>
+    </div>
+    <button class="fold" id="fold" title="Свернуть">−</button>
+  </div>
+
+  <div class="panel-body">
+    <div class="tabs">
+      <button class="tab active" data-s="route">Маршрут</button>
+      <button class="tab" data-s="sea">Море</button>
+      <button class="tab" data-s="drive">За рулём</button>
+    </div>
+
+    <div class="scroll">
+      <section class="section active" id="s-route">
+        <div class="totals">
+          <div class="tot"><div class="k">Основной круг</div><div class="v">≈ 3 000 км</div><div class="s">Ростов → Тула</div></div>
+          <div class="tot"><div class="k">Дней в пути</div><div class="v">21</div><div class="s">9 — 29 сентября</div></div>
+        </div>
+        <div id="chain" class="chain"></div>
+      </section>
+
+      <section class="section" id="s-sea">
+        <p class="lede" style="margin-bottom:12px">Море больше не держит маршрут. Это подарок себе на один-два дня, если в горах устанем или захочется просто лежать рядом и ничего не делать.</p>
+        <div class="seaToggle" id="seaToggle">
+          <button data-sea="yeysk" class="on">Ейск · Азов</button>
+          <button data-sea="gelendzhik">Геленджик · Чёрное</button>
+          <button data-sea="none">Без моря</button>
+        </div>
+        <div id="seaBody"></div>
+      </section>
+
+      <section class="section" id="s-drive">
+        <div id="driveBody"></div>
+      </section>
+    </div>
+  </div>
+</aside>
+
+<div class="legend">
+  <h4>Как читать карту</h4>
+  <div><i style="background:#d4677f"></i> Ростов и Курск — главное</div>
+  <div><i style="background:#8e2f4a"></i> Ночёвка в пути</div>
+  <div><i style="background:#3a6b52"></i> Горы и природа</div>
+  <div><i style="background:#9a6b3f"></i> Память и города</div>
+  <div><span class="dash"></span> Море — по желанию</div>
+  <div style="margin-top:8px;font-weight:700;color:var(--wine)">▸ стрелки = куда едем</div>
+</div>
+
+<div class="love-line" id="loveLine">«…и весь этот сентябрь — только про нас»</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ══════════ фотографии (Wikimedia Commons) ══════════ */
+const PH = {
+  rostov:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Rostov-on-Don%2C_Don_River%2C_Rostov-on-Don%2C_Russia.jpg/1280px-Rostov-on-Don%2C_Don_River%2C_Rostov-on-Don%2C_Russia.jpg",
+  pyatigorsk:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Mount_Mashuk_%28October_2023%29_-_3.jpg/1280px-Mount_Mashuk_%28October_2023%29_-_3.jpg",
+  kislovodsk:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Colonnade_%D0%9A%D0%BE%D0%BB%D0%BE%D0%BD%D0%BD%D0%B0%D0%B4%D0%B0.jpg/1280px-Colonnade_%D0%9A%D0%BE%D0%BB%D0%BE%D0%BD%D0%BD%D0%B0%D0%B4%D0%B0.jpg",
+  dzhilysu:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/%D0%92%D0%B8%D0%B4_%D0%BD%D0%B0_%D0%AD%D0%BB%D1%8C%D0%B1%D1%80%D1%83%D1%81_%D0%BF%D0%BE_%D0%BF%D1%83%D1%82%D0%B8_%D0%B2_%D0%94%D0%B6%D0%B8%D0%BB%D1%8B-%D0%A1%D1%83.jpg/1280px-%D0%92%D0%B8%D0%B4_%D0%BD%D0%B0_%D0%AD%D0%BB%D1%8C%D0%B1%D1%80%D1%83%D1%81_%D0%BF%D0%BE_%D0%BF%D1%83%D1%82%D0%B8_%D0%B2_%D0%94%D0%B6%D0%B8%D0%BB%D1%8B-%D0%A1%D1%83.jpg",
+  souslik:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Spermophilus_musicus_240981836.jpg/1280px-Spermophilus_musicus_240981836.jpg",
+  elbrus:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Elbrus_from_Cheget.jpg/1280px-Elbrus_from_Cheget.jpg",
+  terskol:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Azau%2C_July_2019.jpg/1280px-Azau%2C_July_2019.jpg",
+  alpaca:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Alpaca_Portrait_%2826631626457%29.jpg/1280px-Alpaca_Portrait_%2826631626457%29.jpg",
+  chegem:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Side_view_of_the_Chegem_waterfalls.jpg/1280px-Side_view_of_the_Chegem_waterfalls.jpg",
+  bluelakes:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/%D0%93%D0%BE%D0%BB%D1%83%D0%B1%D1%8B%D0%B5_%D0%BE%D0%B7%D1%91%D1%80%D0%B0.jpg/1280px-%D0%93%D0%BE%D0%BB%D1%83%D0%B1%D1%8B%D0%B5_%D0%BE%D0%B7%D1%91%D1%80%D0%B0.jpg",
+  elista:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Golden_Temple_Elista_Kalmykia.jpg/1280px-Golden_Temple_Elista_Kalmykia.jpg",
+  volgograd:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Mamayev_Kurgan_Volgograd.jpg/1280px-Mamayev_Kurgan_Volgograd.jpg",
+  prokhorovka:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/%D0%97%D0%B2%D0%BE%D0%BD%D0%BD%D0%B8%D1%86%D0%B0_%D0%BC%D0%B5%D0%BC%D0%BE%D1%80%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%B0_%C2%AB%D0%9F%D1%80%D0%BE%D1%85%D0%BE%D1%80%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B5_%D0%BF%D0%BE%D0%BB%D0%B5%C2%BB_%281%29.jpg/1280px-%D0%97%D0%B2%D0%BE%D0%BD%D0%BD%D0%B8%D1%86%D0%B0_%D0%BC%D0%B5%D0%BC%D0%BE%D1%80%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%B0_%C2%AB%D0%9F%D1%80%D0%BE%D1%85%D0%BE%D1%80%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B5_%D0%BF%D0%BE%D0%BB%D0%B5%C2%BB_%281%29.jpg",
+  kursk:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/City_center_of_Kursk.jpg/1280px-City_center_of_Kursk.jpg",
+  tula:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Tula_asv2019-09_img04_Kremlin_aerial_view.jpg/1280px-Tula_asv2019-09_img04_Kremlin_aerial_view.jpg",
+  yasnayapolyana:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tula_YasnayaPolyana_asv2019-09_img11_LNTolstoy_House.jpg/1280px-Tula_YasnayaPolyana_asv2019-09_img11_LNTolstoy_House.jpg",
+  gelendzhik:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gelendzhik_resort._View_of_the_bay_from_the_Tolstoy_Cape_embankment.jpg/1280px-Gelendzhik_resort._View_of_the_bay_from_the_Tolstoy_Cape_embankment.jpg",
+  yeysk:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/%D0%9F%D0%BB%D1%8F%D0%B6_-_panoramio_-_malamash.jpg/1280px-%D0%9F%D0%BB%D1%8F%D0%B6_-_panoramio_-_malamash.jpg"
+};
+
+const C = { reunion:"#d4677f", stop:"#8e2f4a", nature:"#3a6b52", city:"#9a6b3f", sea:"#2f7f8e" };
+
+/* ══════════ основной круг ══════════ */
+const STOPS = [
+  { key:"rostov", n:1, name:"Ростов-на-Дону", dates:"9 — 10 сентября", lat:47.2357, lng:39.7015,
+    color:C.reunion, photo:PH.rostov, heart:true,
+    text:"Ты встречаешь меня здесь. Сутки без плана, без маршрута и без чужих людей — только набережная Дона на закате, Пушкинская вечером и мы, которым нужно заново привыкнуть, что можно просто протянуть руку.",
+    badges:[["love","только мы вдвоём"],["","1 ночь"]] },
+
+  { key:"pyatigorsk", n:2, name:"Пятигорск", dates:"11 — 12 сентября", lat:44.0486, lng:43.0594,
+    color:C.stop, photo:PH.pyatigorsk,
+    text:"Не гоним до гор в один присест. Ночуем на Водах, поднимаемся на Машук за первым панорамным «ах», гуляем лермонтовскими местами. Здесь начинает пахнуть горами.",
+    badges:[["","база на Водах"],["","2 ночи"]] },
+
+  { key:"kislovodsk", n:3, name:"Кисловодск", dates:"13 сентября", lat:43.9053, lng:42.7168,
+    color:C.stop, photo:PH.kislovodsk,
+    text:"Курортный парк — один из самых больших в Европе, и по нему хочется идти молча, взявшись за руки. Нарзанная галерея, Колоннада, канатка на Малое седло. Отсюда завтра уходим в серпантин.",
+    badges:[["","база перед Джилы-Су"],["warn","залить полный бак"]] },
+
+  { key:"dzhilisu", n:4, name:"Джилы-Су · суслики", dates:"14 сентября", lat:43.433, lng:42.237,
+    color:C.nature, photo:PH.souslik,
+    text:"Тот самый день с сусликами. 85 км серпантина из Кисловодска — и колония кавказских сусликов прямо у тропы к водопаду Султан. Они свистят, встают столбиком и почти не боятся. Это не зоопарк, а дикое урочище: смотрим и фотографируем, но не кормим и не трогаем.",
+    badges:[["warn","нет связи и заправок"],["warn","вход ≈200 ₽, наличные"],["","радиальный выезд"]] },
+
+  { key:"terskol", n:5, name:"Терскол · Приэльбрусье", dates:"15 — 19 сентября", lat:43.2578, lng:42.4667,
+    color:C.nature, photo:PH.elbrus,
+    text:"Сердце поездки, пять ночей у подножия Эльбруса. Здесь никуда не надо спешить: горы сами задают темп, а погода решает, какой день чему принадлежит.",
+    badges:[["love","5 ночей"],["","база для радиалок"]] },
+
+  { key:"simba", n:6, name:"Парк альпак «Симба»", dates:"один из дней", lat:43.2508, lng:42.5085,
+    color:C.nature, photo:PH.alpaca,
+    text:"На въезде в Терскол, перед поворотом на Чегет. Приезжаем к 16:00 — с четырёх до шести альпак выпускают из вольеров, и их можно гладить и кормить прямо на свободном выгуле. Тёплый чай бесплатно, и ты будешь смеяться так, как я скучал.",
+    badges:[["love","обнимашки с альпаками"],["","16:00 — 18:00 выгул"],["","9:00 — 20:00"]] },
+
+  { key:"azau", n:7, name:"Азау → Гара-Баши", dates:"один из дней", lat:43.2661, lng:42.4842,
+    color:C.nature, photo:PH.terskol,
+    text:"Канатка с поляны Азау на 3 847 м — самая высокая в Европе. Наверху снег в сентябре, разреженный воздух и две вершины Эльбруса так близко, что не верится. Возьми тёплое: внизу +20, наверху около нуля.",
+    badges:[["","канатка, не машина"],["warn","тёплые куртки"]] },
+
+  { key:"chegem", n:8, name:"Чегем · Голубые озёра", dates:"день на погоду", lat:43.431, lng:43.256,
+    color:C.nature, photo:PH.chegem,
+    text:"План на случай, если Эльбрус закроет облаками. Чегемские водопады бьют прямо из скальной щели, а Голубые озёра держат один и тот же нездешний цвет круглый год.",
+    badges:[["","запасной день"],["","радиально из Терскола"]] },
+
+  { key:"elista", n:9, name:"Элиста", dates:"22 сентября", lat:46.3078, lng:44.2558,
+    color:C.stop, photo:PH.elista,
+    text:"Ночёвка ровно там, где Кавказ переходит в степь. Золотая обитель Будды Шакьямуни — самый большой буддийский храм в Европе, и после гор он звучит совершенно неожиданно. Приятный крюк, который ничего не стоит.",
+    badges:[["","1 ночь"],["love","неожиданное место"]] },
+
+  { key:"volgograd", n:10, name:"Волгоград · Мамаев курган", dates:"23 — 24 сентября", lat:48.7425, lng:44.537,
+    color:C.city, photo:PH.volgograd,
+    text:"Мамаев курган лучше проходить неспешно, от подножия вверх, и обязательно зайти в Зал воинской славы. Потом — Волга, набережная и долгий тихий вечер, когда не хочется говорить.",
+    badges:[["","2 ночи"],["","Родина-мать"]] },
+
+  { key:"borisoglebsk", n:11, name:"Борисоглебск", dates:"25 сентября", lat:51.3669, lng:42.0747,
+    color:C.stop, photo:null,
+    text:"Техническая ночёвка, которая спасает от десяти часов за рулём. Маленький тихий городок ровно посередине между Волгой и Курском. Ничего не смотрим — просто спим и едем дальше.",
+    badges:[["","1 ночь"],["","делит перегон пополам"]] },
+
+  { key:"prokhorovka", n:12, name:"Прохоровка", dates:"по пути 26 сентября", lat:51.037, lng:36.748,
+    color:C.city, photo:PH.prokhorovka,
+    text:"Небольшой заезд по дороге к Курску. Звонница на Прохоровском поле, танковый музей и самая тихая тишина, какую можно себе представить.",
+    badges:[["","заезд по пути"]] },
+
+  { key:"kursk", n:13, name:"Курск · родители Викторинки", dates:"26 — 27 сентября", lat:51.7373, lng:36.1873,
+    color:C.reunion, photo:PH.kursk, family:true,
+    text:"Не остановка в маршруте, а вторая по важности точка всей поездки после Ростова. Здесь я знакомлюсь с твоими родителями — потому что мы собираемся создать семью, и такие вещи говорят вживую, глядя в глаза, а не по телефону. Приезжаем без спешки, с запасом в два дня: чтобы успеть выспаться перед встречей и чтобы после неё не пришлось никуда бежать.",
+    badges:[["love","знакомство с родителями"],["love","мы создаём семью"],["","2 ночи, без спешки"]] },
+
+  { key:"tula", n:14, name:"Тула", dates:"28 сентября", lat:54.1931, lng:37.6173,
+    color:C.city, photo:PH.tula,
+    text:"Тульский кремль, набережная Упы, музей пряника и самоваров. Город, который за последние годы стал неожиданно красивым.",
+    badges:[["","2 ночи"]] },
+
+  { key:"yasna", n:15, name:"Ясная Поляна", dates:"29 сентября", lat:54.076, lng:37.526,
+    color:C.city, photo:PH.yasnayapolyana,
+    text:"Финал. Усадьба Толстого в конце сентября — это золото, тишина и очень длинные аллеи. Лучшее место, чтобы закончить три недели и молча решить, что следующая встреча будет скоро.",
+    badges:[["love","последний день"],["","дом, парк, аллеи"]] }
+];
+
+/* перегоны основного круга: км и часы за рулём */
+const LEGS = [
+  { from:"rostov", to:"pyatigorsk", km:504, hrs:"6,5 — 7,5 ч", note:"М-4 и Р-217" },
+  { from:"pyatigorsk", to:"kislovodsk", km:42, hrs:"50 мин", note:"короткий переезд" },
+  { from:"kislovodsk", to:"dzhilisu", km:85, hrs:"2,5 ч", note:"серпантин в одну сторону, туда и обратно", warn:true },
+  { from:"dzhilisu", to:"kislovodsk", km:85, hrs:"2,5 ч", note:"возвращаемся ночевать", back:true },
+  { from:"kislovodsk", to:"terskol", km:196, hrs:"3,5 ч", note:"через Баксан и Тырныауз" },
+  { from:"terskol", to:"simba", km:4, hrs:"10 мин", note:"на въезде в Терскол", local:true },
+  { from:"simba", to:"azau", km:6, hrs:"15 мин", note:"до парковки Азау", local:true },
+  { from:"azau", to:"chegem", km:120, hrs:"2,5 ч", note:"радиально, если облачно", local:true },
+  { from:"chegem", to:"elista", km:490, hrs:"7 — 8 ч", note:"самый длинный день круга", warn:true },
+  { from:"elista", to:"volgograd", km:293, hrs:"4 ч", note:"степь и Волга" },
+  { from:"volgograd", to:"borisoglebsk", km:345, hrs:"4,5 ч", note:"спокойный перегон" },
+  { from:"borisoglebsk", to:"prokhorovka", km:390, hrs:"5 ч", note:"обед в Воронеже" },
+  { from:"prokhorovka", to:"kursk", km:120, hrs:"1,5 ч", note:"добираем до Курска" },
+  { from:"kursk", to:"tula", km:350, hrs:"4,5 ч", note:"ровная дорога" },
+  { from:"tula", to:"yasna", km:15, hrs:"25 мин", note:"почти в городе", local:true }
+];
+
+/* ══════════ море: опциональные ветки ══════════ */
+const SEA = {
+  yeysk:{
+    key:"yeysk", n:"★", name:"Ейск · Азовское море", lat:46.7106, lng:38.2773, photo:PH.yeysk,
+    anchor:"rostov", km:180, hrs:"2 ч 45 мин",
+    when:"сразу после Ростова, 11 — 12 сентября",
+    text:"Самый лёгкий способ добавить море. От Ростова всего 180 км — выехали после завтрака, к обеду уже на песке. Азов тёплый и мелкий, вода в сентябре как парное молоко, людей почти нет. Идеально, если хочется два дня просто лежать рядом и ничего не решать.",
+    badges:[["sea","+360 км туда-обратно"],["sea","1 — 2 ночи"],["love","самый простой заезд"]],
+    verdict:"Мой выбор, если море нужно «для нас», а не «для галочки»."
+  },
+  gelendzhik:{
+    key:"gelendzhik", n:"★", name:"Геленджик · Чёрное море", lat:44.5622, lng:38.0848, photo:PH.gelendzhik,
+    anchor:"terskol", km:713, hrs:"11 ч",
+    when:"после гор, 20 — 21 сентября",
+    text:"Настоящее Чёрное море в бархатный сезон: вода +23…+25, набережная, бухта, Кабардинка спокойнее центра. Но с гор это 713 км и одиннадцать часов, поэтому по пути обязательна ночёвка в Армавире, а обратно на Волгу — через Ростов.",
+    badges:[["sea","+570 км к кругу"],["warn","2 лишние ночи в дороге"],["sea","вода +23…+25"]],
+    verdict:"Берём, если хочется именно Чёрного моря и мы готовы к двум долгим перегонам."
+  }
+};
+
+/* ══════════ карта ══════════ */
+const byKey = {};
+STOPS.forEach(s => byKey[s.key] = s);
+
+const map = L.map("map",{ zoomControl:false, attributionControl:false }).setView([48.4,41.2],6);
+L.control.zoom({ position:"bottomleft" }).addTo(map);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{ maxZoom:18 }).addTo(map);
+
+const ll = k => byKey[k] ? [byKey[k].lat, byKey[k].lng] : [SEA[k].lat, SEA[k].lng];
+
+function pin(color, label, opts={}){
+  const cls = "pin " + (opts.small ? "small" : "big") + (opts.heart ? " heart" : "") + (opts.pulse ? " pulse" : "");
+  const size = opts.small ? 22 : 32;
+  return L.divIcon({
+    className:"", iconSize:[size,size], iconAnchor:[size/2,size/2],
+    html:`<div class="${cls}" style="background:${color};position:relative">${label}</div>`
+  });
+}
+
+function popup(s){
+  const img = s.photo ? `<img src="${s.photo}" alt="" loading="lazy">` : "";
+  return `<div class="pop">${img}
+    <div class="b"><div class="d">${s.dates || s.when || ""}</div>
+    <div class="t">${s.name}</div><p>${s.text}</p></div></div>`;
+}
+
+/* стрелка направления посередине отрезка */
+function bearing(a,b){
+  const toR = d => d*Math.PI/180, toD = r => r*180/Math.PI;
+  const [la1,lo1]=[toR(a[0]),toR(a[1])], [la2,lo2]=[toR(b[0]),toR(b[1])];
+  const y = Math.sin(lo2-lo1)*Math.cos(la2);
+  const x = Math.cos(la1)*Math.sin(la2)-Math.sin(la1)*Math.cos(la2)*Math.cos(lo2-lo1);
+  return (toD(Math.atan2(y,x))+360)%360;
+}
+
+const layers = { route:[], sea:[] };
+/* подписи с километражом показываем только когда карта достаточно приближена,
+   иначе на Кавказе они наезжают друг на друга */
+const labels = [];
+
+function syncLabels(){
+  const z = map.getZoom();
+  labels.forEach(l=>{
+    const want = z >= l.minZoom;
+    if(want && !map.hasLayer(l.marker)) l.marker.addTo(map);
+    else if(!want && map.hasLayer(l.marker)) map.removeLayer(l.marker);
+  });
+}
+map.on("zoomend", syncLabels);
+
+function drawLeg(a, b, o={}){
+  const A = ll(a), B = ll(b);
+  const bucket = o.sea ? layers.sea : layers.route;
+
+  const line = L.polyline([A,B],{
+    color: o.sea ? "#2f7f8e" : (o.local ? "#3a6b52" : "#8e2f4a"),
+    weight: o.sea ? 3 : (o.local ? 2.5 : 4),
+    opacity: o.back ? .35 : .85,
+    dashArray: o.sea ? "9,8" : (o.back ? "3,7" : null),
+    lineCap:"round"
+  }).addTo(map);
+  bucket.push(line);
+
+  if(!o.back){
+    // 1–3 стрелки на отрезок, в зависимости от длины
+    const dist = map.distance(A,B);
+    const count = dist > 400000 ? 3 : dist > 120000 ? 2 : 1;
+    const brg = bearing(A,B);
+    for(let i=1;i<=count;i++){
+      const t = i/(count+1);
+      const mid = [A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t];
+      const arw = L.marker(mid,{
+        interactive:false,
+        icon:L.divIcon({ className:"", iconSize:[18,18], iconAnchor:[9,9],
+          html:`<div class="arrow${o.sea?" sea":""}" style="transform:rotate(${brg-90}deg)">➤</div>` })
+      }).addTo(map);
+      bucket.push(arw);
+    }
+    // подпись с км и часами
+    if(o.km && !o.local){
+      const mid = [(A[0]+B[0])/2, (A[1]+B[1])/2];
+      const lb = L.marker(mid,{ interactive:false,
+        icon:L.divIcon({ className:"", iconSize:[0,0], iconAnchor:[0,26],
+          html:`<div class="lbl${o.sea?" sea":""}">${o.km} км · ${o.hrs}</div>` })
+      });
+      bucket.push(lb);
+      labels.push({ marker:lb, minZoom: o.km >= 250 ? 6 : o.km >= 120 ? 7 : 9 });
+    }
+  }
+  return line;
+}
+
+/* маркеры основного круга.
+   Точки внутри одного района (Симба, Азау, Чегем, Прохоровка, Ясная Поляна)
+   появляются только при приближении, иначе они слипаются в пятно. */
+const markers = {};
+const DETAIL = ["simba","azau","chegem","prokhorovka","yasna","kislovodsk","dzhilisu"];
+const detailMarkers = [];
+
+STOPS.forEach(s=>{
+  const local = DETAIL.includes(s.key);
+  const m = L.marker([s.lat,s.lng],{
+    icon: pin(s.color, s.heart ? "♥" : s.n, { small:local, heart:s.heart, pulse:s.heart || s.family })
+  }).bindPopup(popup(s),{ maxWidth:260, closeButton:false });
+  m.on("click",()=>select(s.key,false));
+  markers[s.key]=m;
+  if(local) detailMarkers.push(m); else m.addTo(map);
+});
+
+function syncMarkers(){
+  const show = map.getZoom() >= 8;
+  detailMarkers.forEach(m=>{
+    if(show && !map.hasLayer(m)) m.addTo(map);
+    else if(!show && map.hasLayer(m) && !m.isPopupOpen()) map.removeLayer(m);
+  });
+}
+map.on("zoomend", syncMarkers);
+
+LEGS.forEach(l=>drawLeg(l.from,l.to,l));
+
+/* ── море ── */
+let seaMode = "yeysk";
+const seaMarkers = [];
+
+function renderSea(){
+  layers.sea.forEach(l=>{ if(map.hasLayer(l)) map.removeLayer(l); });
+  for(let i=labels.length-1;i>=0;i--){
+    if(layers.sea.includes(labels[i].marker)) labels.splice(i,1);
+  }
+  layers.sea = [];
+  seaMarkers.forEach(m=>map.removeLayer(m)); seaMarkers.length=0;
+
+  const box = document.getElementById("seaBody");
+  if(seaMode==="none"){
+    box.innerHTML = `<div class="note"><b>Без моря.</b> Круг остаётся ≈ 3 000 км и самым спокойным: горы, степь, Волга и Тула, без длинных перегонов к берегу. Всегда можно передумать на месте — обе ветки останутся здесь.</div>`;
+    document.getElementById("chipKm").textContent = "≈ 3 000 км";
+    return;
+  }
+
+  const s = SEA[seaMode];
+  drawLeg(s.anchor, s.key, { sea:true, km:s.km, hrs:s.hrs });
+  drawLeg(s.key, s.anchor, { sea:true, back:true });
+
+  const m = L.marker([s.lat,s.lng],{ icon:pin(C.sea,"★") }).addTo(map)
+    .bindPopup(popup(s),{ maxWidth:260, closeButton:false });
+  m.on("click",()=>{ map.flyTo([s.lat,s.lng],10,{duration:1.1}); m.openPopup(); });
+  seaMarkers.push(m);
+
+  box.innerHTML = `
+    <button class="stop optional active" onclick="window.__sea()">
+      <span class="stop-photo" style="background-image:url('${s.photo}')">
+        <span class="num">★</span>
+        <span class="cap"><span class="d">${s.when}</span><span class="t">${s.name}</span></span>
+      </span>
+      <span class="stop-txt">
+        <p>${s.text}</p>
+        <span class="badges">${s.badges.map(b=>`<span class="badge ${b[0]}">${b[1]}</span>`).join("")}</span>
+      </span>
+    </button>
+    <div class="note"><b>Вывод.</b> ${s.verdict}</div>`;
+
+  document.getElementById("chipKm").textContent = "≈ " + (3000 + s.km*2).toLocaleString("ru-RU") + " км";
+  window.__sea = ()=>{ map.flyTo([s.lat,s.lng],10,{duration:1.1}); m.openPopup(); };
+}
+
+document.getElementById("seaToggle").addEventListener("click",e=>{
+  const b = e.target.closest("button[data-sea]"); if(!b) return;
+  seaMode = b.dataset.sea;
+  document.querySelectorAll("#seaToggle button").forEach(x=>x.classList.toggle("on",x===b));
+  renderSea();
+});
+
+/* ══════════ панель: цепочка маршрута ══════════ */
+const chain = document.getElementById("chain");
+const legFrom = {};
+LEGS.forEach(l=>{ if(!l.back) (legFrom[l.to] = legFrom[l.to] || l); });
+
+let html = "";
+STOPS.forEach((s,i)=>{
+  if(i>0){
+    const l = legFrom[s.key];
+    if(l) html += `<div class="leg-arrow${l.local?" soft":""}">
+      <span class="v">↓</span><span><b>${l.km} км</b> · ${l.hrs} · ${l.note}</span></div>`;
+  }
+  html += `<button class="stop${s.family?" family":""}" data-k="${s.key}">
+    <span class="stop-photo${s.photo?"":" plain"}"${s.photo?` style="background-image:url('${s.photo}')"`:""}>
+      <span class="num">${s.heart?"♥":s.n}</span>
+      <span class="cap"><span class="d">${s.dates}</span><span class="t">${s.name}</span></span>
+    </span>
+    <span class="stop-txt">
+      <p>${s.text}</p>
+      <span class="badges">${s.badges.map(b=>`<span class="badge ${b[0]}">${b[1]}</span>`).join("")}</span>
+    </span>
+  </button>`;
+
+  if(s.key==="dzhilisu") html += `<div class="leg-arrow"><span class="v">↑</span><span>возвращаемся в Кисловодск ночевать — <b>85 км</b> обратно</span></div>`;
+  if(s.key==="rostov") html += `<div class="divider"><span>♥ отсюда начинается всё</span></div>`;
+  if(s.key==="chegem") html += `<div class="divider"><span>горы позади · дальше степь</span></div>`;
+  if(s.key==="prokhorovka") html += `<div class="divider"><span>♥ а теперь — самое важное</span></div>`;
+});
+chain.innerHTML = html;
+
+chain.addEventListener("click",e=>{
+  const b = e.target.closest(".stop[data-k]"); if(!b) return;
+  select(b.dataset.k,true);
+});
+
+function select(key,fromPanel){
+  document.querySelectorAll(".stop[data-k]").forEach(x=>x.classList.toggle("active",x.dataset.k===key));
+  const s = byKey[key]; if(!s) return;
+  const zoom = ["rostov","tula","volgograd","kursk"].includes(key) ? 11
+             : ["simba","azau","yasna","prokhorovka"].includes(key) ? 13 : 10;
+  map.flyTo([s.lat,s.lng],zoom,{ duration:1.2 });
+  if(fromPanel){
+    if(!map.hasLayer(markers[key])) markers[key].addTo(map);
+    markers[key].openPopup();
+  }
+  else {
+    const el = document.querySelector(`.stop[data-k="${key}"]`);
+    if(el){ document.querySelector(".tab[data-s='route']").click();
+      el.scrollIntoView({ behavior:"smooth", block:"center" }); }
+  }
+}
+
+/* ══════════ вкладка «За рулём» ══════════ */
+document.getElementById("driveBody").innerHTML = `
+  <div class="note"><b>Главное правило.</b> Не больше 6 — 7 часов за рулём в день. Всё, что длиннее, разрезано ночёвкой: Пятигорск перед горами, Борисоглебск между Волгой и Курском.</div>
+
+  <div class="divider"><span>Серпантин на Джилы-Су</span></div>
+  <p class="lede">85 км от Кисловодска в одну сторону, <b>без заправок и почти без связи</b>. Полный бак заливаем в Кисловодске, берём воду, наличные и скачиваем карту офлайн. Обратно тем же путём — весь день уходит только на это.</p>
+
+  <div class="divider"><span>Что нужно наличными</span></div>
+  <p class="lede">Вход в национальный парк «Приэльбрусье» — около <b>200 ₽ с человека</b>, карты не принимают. На постах и смотровых площадках тоже берут только наличные, поэтому мелкие купюры пусть лежат в бардачке.</p>
+
+  <div class="divider"><span>Где заправляться</span></div>
+  <p class="lede">Кисловодск — перед Джилы-Су. Баксан или Тырныауз — перед подъёмом в Терскол. Дальше в горах колонок практически нет.</p>
+
+  <div class="divider"><span>Азау → Гара-Баши</span></div>
+  <p class="lede">Это <b>канатная дорога, а не дорога для машины</b>. На автомобиле доезжаем только до парковки на поляне Азау, выше — три очереди подъёмника до 3 847 м.</p>
+
+  <div class="divider"><span>Самый тяжёлый день</span></div>
+  <p class="lede">Терскол → Элиста, <b>490 км и 7 — 8 часов</b>. Если не захочется, режем его ночёвкой в Ставрополе: 260 км и 4,5 часа, а на следующий день остаток.</p>
+
+  <div class="note"><b>И ещё.</b> Ростов 9 — 10 сентября остаётся без маршрута специально. Там нечего планировать.</div>
+
+  <div class="note"><b>Курск — отдельно.</b> В день знакомства с родителями за рулём быть не должно вообще. Поэтому длинный перегон разрезан ночёвкой в Борисоглебске, а в Курске заложены две ночи: приезжаем, выдыхаем, и только потом идём знакомиться.</div>`;
+
+/* ══════════ мелочи ══════════ */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  document.getElementById("s-"+t.dataset.s).classList.add("active");
+}));
+
+document.getElementById("fold").addEventListener("click",()=>{
+  const p = document.getElementById("panel");
+  p.classList.toggle("collapsed");
+  document.getElementById("fold").textContent = p.classList.contains("collapsed") ? "+" : "−";
+});
+
+const LINES = [
+  "«…и весь этот сентябрь — только про нас»",
+  "«три недели, чтобы наверстать четыре месяца»",
+  "«я считал дни — их осталось совсем немного»",
+  "«от Дона до Эльбруса и обратно к тебе»"
+];
+let li = 0;
+const loveEl = document.getElementById("loveLine");
+setInterval(()=>{
+  li = (li+1) % LINES.length;
+  loveEl.style.opacity = 0;
+  setTimeout(()=>{ loveEl.textContent = LINES[li]; loveEl.style.opacity = 1; }, 450);
+}, 7000);
+loveEl.style.transition = "opacity .45s ease";
+
+renderSea();
+map.fitBounds(L.latLngBounds(STOPS.map(s=>[s.lat,s.lng])).pad(.12));
+syncLabels();
+syncMarkers();
+</script>
+</body>
+</html>

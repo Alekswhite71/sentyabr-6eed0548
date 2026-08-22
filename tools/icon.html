@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<style>
+  html,body{margin:0;padding:0;width:1024px;height:1024px;overflow:hidden}
+  .ic{
+    width:1024px;height:1024px;position:relative;
+    background:
+      radial-gradient(circle at 26% 18%, #d4677f 0%, transparent 55%),
+      linear-gradient(145deg,#8e2f4a 0%,#a83f5c 46%,#6d2438 100%);
+    display:grid;place-items:center;
+  }
+  .glow{
+    position:absolute;width:760px;height:760px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.2),transparent 62%);
+  }
+  svg{position:relative;filter:drop-shadow(0 26px 60px rgba(0,0,0,.42))}
+  .ring{
+    position:absolute;width:880px;height:880px;border-radius:50%;
+    border:5px solid rgba(255,255,255,.26);
+  }
+</style></head>
+<body>
+  <div class="ic">
+    <div class="glow"></div>
+    <div class="ring"></div>
+    <svg width="520" height="520" viewBox="0 0 24 24" fill="none">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset="1" stop-color="#ffd9e0"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#g)" d="M12 21s-7.5-4.9-9.4-9.2C1 8.3 2.8 5 6.2 4.3c2.1-.4 4 .6 5 2.2 1-1.6 2.9-2.6 5-2.2 3.4.7 5.2 4 3.6 7.5C19.5 16.1 12 21 12 21z"/>
+    </svg>
+  </div>
+</body>
+</html>

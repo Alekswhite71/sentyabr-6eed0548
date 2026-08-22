@@ -1,0 +1,38 @@
+name: Ежедневное уведомление
+
+on:
+  schedule:
+    # 06:00 UTC = 09:00 по Москве
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Только показать текст, не отправлять"
+        type: boolean
+        default: false
+
+concurrency:
+  group: daily-push
+  cancel-in-progress: false
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Установить web-push
+        run: npm install --no-save web-push@3
+
+      - name: Отправить
+        env:
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          PUSH_SUB: ${{ secrets.PUSH_SUB }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+        run: node tools/send-push.mjs

@@ -1,0 +1,10 @@
+# приватный ключ для пушей — только локально и в секретах GitHub
+vapid.local.json
+
+# подписка Виктории, если сохраню её на диск
+push-sub.local.txt
+
+node_modules/
+package-lock.json
+.DS_Store
+_*

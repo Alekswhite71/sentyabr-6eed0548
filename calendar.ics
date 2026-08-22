@@ -1,0 +1,355 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//nash sentyabr//RU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:♥ До встречи
+X-WR-CALDESC:Каждый день на один ближе
+BEGIN:VEVENT
+UID:vika-2026-08-22@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260822T060000Z
+DTEND:20260822T061500Z
+SUMMARY:♥ 18 дней — Это меньше\, чем я уже про
+ ждал. Самое трудное позади\, моя девочка
+ .
+DESCRIPTION:Это меньше\, чем я уже прождал. Сам
+ ое трудное позади\, моя девочка.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 18 дней — Это меньше\, чем я уже п
+ рождал. Самое трудное позади\, моя девоч
+ ка.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-23@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260823T060000Z
+DTEND:20260823T061500Z
+SUMMARY:♥ 17 дней — Я начал собирать вещи мы
+ сленно\, и в каждом чемодане почему-то т
+ олько ты.
+DESCRIPTION:Я начал собирать вещи мысленно\, и
+  в каждом чемодане почему-то только ты.  
+ ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 17 дней — Я начал собирать вещи 
+ мысленно\, и в каждом чемодане почему-то
+  только ты.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-24@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260824T060000Z
+DTEND:20260824T061500Z
+SUMMARY:♥ 16 дней — Сегодня поймал себя на т
+ ом\, что улыбаюсь без причины. Причина —
+  ты.
+DESCRIPTION:Сегодня поймал себя на том\, что у
+ лыбаюсь без причины. Причина — ты.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 16 дней — Сегодня поймал себя на
+  том\, что улыбаюсь без причины. Причина 
+ — ты.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-25@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260825T060000Z
+DTEND:20260825T061500Z
+SUMMARY:♥ 15 дней — Половина пути до тебя пр
+ ойдена. Дальше будет только быстрее.
+DESCRIPTION:Половина пути до тебя пройдена. Д
+ альше будет только быстрее.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 15 дней — Половина пути до тебя 
+ пройдена. Дальше будет только быстрее.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-26@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260826T060000Z
+DTEND:20260826T061500Z
+SUMMARY:♥ 14 дней — Две недели\, моя родная. С
+ только раз лечь спать — и Ростов.
+DESCRIPTION:Две недели\, моя родная. Столько р
+ аз лечь спать — и Ростов.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 14 дней — Две недели\, моя родная
+ . Столько раз лечь спать — и Ростов.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-27@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260827T060000Z
+DTEND:20260827T061500Z
+SUMMARY:♥ 13 дней — Говорят\, это число несча
+ стливое. У меня счастливое — оно ближе 
+ к тебе.
+DESCRIPTION:Говорят\, это число несчастливое. 
+ У меня счастливое — оно ближе к тебе.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 13 дней — Говорят\, это число нес
+ частливое. У меня счастливое — оно ближ
+ е к тебе.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-28@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260828T060000Z
+DTEND:20260828T061500Z
+SUMMARY:♥ 12 дней — Я уже знаю\, что скажу теб
+ е первым. Но не скажу — увидишь сама.
+DESCRIPTION:Я уже знаю\, что скажу тебе первым.
+  Но не скажу — увидишь сама.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 12 дней — Я уже знаю\, что скажу т
+ ебе первым. Но не скажу — увидишь сама.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-29@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260829T060000Z
+DTEND:20260829T061500Z
+SUMMARY:♥ 11 дней — Скучаю так\, что это уже п
+ охоже на профессию.
+DESCRIPTION:Скучаю так\, что это уже похоже на 
+ профессию.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 11 дней — Скучаю так\, что это уж
+ е похоже на профессию.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-30@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260830T060000Z
+DTEND:20260830T061500Z
+SUMMARY:♥ 10 дней — Люблю тебя больше\, чем у
+ мею объяснить. И с каждым днём сильнее.
+DESCRIPTION:Люблю тебя больше\, чем умею объяс
+ нить. И с каждым днём сильнее.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 10 дней — Люблю тебя больше\, чем
+  умею объяснить. И с каждым днём сильнее
+ .
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-08-31@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260831T060000Z
+DTEND:20260831T061500Z
+SUMMARY:♥ 9 дней — Девятого числа — и это кр
+ асиво совпало\, правда?
+DESCRIPTION:Девятого числа — и это красиво со
+ впало\, правда?  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 9 дней — Девятого числа — и это 
+ красиво совпало\, правда?
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-01@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260901T060000Z
+DTEND:20260901T061500Z
+SUMMARY:♥ 8 дней — Начинаю считать не дни\, а
+  часы. Их получается смешно много и мало
+  сразу.
+DESCRIPTION:Начинаю считать не дни\, а часы. Их
+  получается смешно много и мало сразу.  
+ ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 8 дней — Начинаю считать не дни\
+ , а часы. Их получается смешно много и ма
+ ло сразу.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-02@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260902T060000Z
+DTEND:20260902T061500Z
+SUMMARY:♥ 7 дней — Ровно неделя\, моя девочк
+ а. Скоро я буду смотреть на тебя\, а не на
+  фотографию.
+DESCRIPTION:Ровно неделя\, моя девочка. Скоро 
+ я буду смотреть на тебя\, а не на фотогра
+ фию.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 7 дней — Ровно неделя\, моя дево
+ чка. Скоро я буду смотреть на тебя\, а не 
+ на фотографию.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-03@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260903T060000Z
+DTEND:20260903T061500Z
+SUMMARY:♥ 6 дней — Я перечитал наши перепис
+ ки с мая. Ты невозможная. В самом лучшем 
+ смысле.
+DESCRIPTION:Я перечитал наши переписки с мая. 
+ Ты невозможная. В самом лучшем смысле.  
+ ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 6 дней — Я перечитал наши переп
+ иски с мая. Ты невозможная. В самом лучш
+ ем смысле.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-04@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260904T060000Z
+DTEND:20260904T061500Z
+SUMMARY:♥ 5 дней — Уже можно считать на паль
+ цах одной руки. Той\, которой скоро возь
+ му твою.
+DESCRIPTION:Уже можно считать на пальцах одно
+ й руки. Той\, которой скоро возьму твою.  
+ ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 5 дней — Уже можно считать на па
+ льцах одной руки. Той\, которой скоро во
+ зьму твою.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-05@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260905T060000Z
+DTEND:20260905T061500Z
+SUMMARY:♥ 4 дня — Ростов\, набережная\, закат
+  — и никакого плана. Только ты и я.
+DESCRIPTION:Ростов\, набережная\, закат — и ни
+ какого плана. Только ты и я.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 4 дня — Ростов\, набережная\, зак
+ ат — и никакого плана. Только ты и я.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-06@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260906T060000Z
+DTEND:20260906T061500Z
+SUMMARY:♥ 3 дня — Почти не сплю от предвкуше
+ ния и совсем не жалуюсь.
+DESCRIPTION:Почти не сплю от предвкушения и с
+ овсем не жалуюсь.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 3 дня — Почти не сплю от предвку
+ шения и совсем не жалуюсь.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-07@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260907T060000Z
+DTEND:20260907T061500Z
+SUMMARY:♥ 2 дня — Послезавтра. Ты понимаешь 
+ — послезавтра!
+DESCRIPTION:Послезавтра. Ты понимаешь — посл
+ езавтра!  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 2 дня — Послезавтра. Ты понимае
+ шь — послезавтра!
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-08@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260908T060000Z
+DTEND:20260908T061500Z
+SUMMARY:♥ 1 день — Завтра я тебя обниму и не 
+ отпущу очень долго. Спасибо\, что ждала 
+ меня.
+DESCRIPTION:Завтра я тебя обниму и не отпущу о
+ чень долго. Спасибо\, что ждала меня.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ 1 день — Завтра я тебя обниму и 
+ не отпущу очень долго. Спасибо\, что жда
+ ла меня.
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vika-2026-09-09@nash-sentyabr
+DTSTAMP:20260822T090000Z
+DTSTART:20260909T060000Z
+DTEND:20260909T061500Z
+SUMMARY:♥ СЕГОДНЯ. Я уже в пути к тебе\, моя В
+ иктория. Люблю тебя.
+DESCRIPTION:Я уже в пути к тебе\, моя Виктория. 
+ Люблю тебя.  ♥
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:PT0S
+DESCRIPTION:♥ СЕГОДНЯ. Я уже в пути к тебе\, мо
+ я Виктория. Люблю тебя.
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -210,6 +210,15 @@
 
     /* кнопки зума живут внизу слева — там теперь шторка, поднимаем их наверх */
     .leaflet-bottom.leaflet-left{bottom:auto;top:8px}
+
+    /* Попап раскрывается вверх от точки и в полный рост не влезал в видимую
+       полосу карты — верх обрезало. На телефоне оставляем в нём только
+       название и даты: подробный текст всё равно виден в карточке под картой. */
+    .leaflet-popup-content{width:208px!important}
+    .pop img{height:74px}
+    .pop p{display:none}
+    .pop .b{padding:9px 11px 11px}
+    .pop .t{font-size:17px}
   }
 </style>
 </head>

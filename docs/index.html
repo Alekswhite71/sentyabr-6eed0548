@@ -695,7 +695,7 @@
         document.getElementById("btnAllow").hidden = true;
         state.innerHTML =
           '<div class="ok">Всё готово. Уведомления включены — жди меня каждое утро. ♥</div>' +
-          '<button class="btn ghost" id="btnShow">Показать код для Алекса</button>';
+          '<button class="btn ghost" id="btnShow">Показать код для Котика</button>';
         document.getElementById("btnShow").onclick = () => showCode(sub);
         return;
       }
@@ -735,7 +735,7 @@
       const b = document.createElement("button");
       b.className = "btn";
       b.id = "btnSend";
-      b.textContent = "Отправить код Алексу";
+      b.textContent = "Отправить код Котику своему";
       b.onclick = async () => {
         const text = "Мой код для уведомлений:\n\n" + payload;
         try{
@@ -761,20 +761,33 @@
         btnAllow.disabled = false;
         return;
       }
+      // она могла нажать быстрее, чем зарегистрировался service worker
+      if(!swReg) swReg = await navigator.serviceWorker.ready;
+
       const sub = await swReg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: b64ToU8(VAPID_PUBLIC)
       });
       btnAllow.hidden = true;
       state.innerHTML =
-        '<div class="ok">Готово! Остался один маленький шаг: отправь Алексу этот код, ' +
+        '<div class="ok">Готово! Остался один маленький шаг: отправь Котику своему этот код, ' +
         'чтобы он подключил тебя. Один раз — и всё.</div>';
       showCode(sub);
-      new Notification("♥ Проверка связи", { body:"Вот так это будет выглядеть каждое утро.", icon:"./icons/icon-192.png" });
+
+      /* Пробное уведомление показываем через service worker: на iOS конструктор
+         new Notification() запрещён и падает с ошибкой. Отдельный catch, чтобы
+         неудачная проверка связи не выглядела как провал всей подписки. */
+      try{
+        await swReg.showNotification("♥ Проверка связи", {
+          body: "Вот так это будет выглядеть каждое утро.",
+          icon: "./icons/icon-192.png",
+          tag: "hello"
+        });
+      }catch(_){ /* не страшно, подписка уже оформлена */ }
     }catch(err){
       state.innerHTML = '<div class="warn">Что-то не получилось: ' +
         (err && err.message ? err.message : "неизвестная ошибка") +
-        '. Напиши Алексу, он разберётся.</div>';
+        '. Напиши Котику своему, он разберётся.</div>';
       btnAllow.disabled = false;
       btnAllow.textContent = "Попробовать снова";
     }

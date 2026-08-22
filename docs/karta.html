@@ -484,6 +484,51 @@ function bearing(a,b){
   return (toD(Math.atan2(y,x))+360)%360;
 }
 
+/* расстояние и точка на пути — для стрелок вдоль дороги, а не по прямой */
+function haversine(a,b){
+  const R=6371000, toR=d=>d*Math.PI/180;
+  const dLat=toR(b[0]-a[0]), dLng=toR(b[1]-a[1]);
+  const la1=toR(a[0]), la2=toR(b[0]);
+  const h=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function pathLen(pts){
+  let d=0; for(let i=1;i<pts.length;i++) d+=haversine(pts[i-1],pts[i]); return d;
+}
+function alongPath(pts, frac){
+  const total=pathLen(pts), want=total*frac;
+  let acc=0;
+  for(let i=1;i<pts.length;i++){
+    const seg=haversine(pts[i-1],pts[i]);
+    if(acc+seg>=want){
+      const t=(want-acc)/seg;
+      const lat=pts[i-1][0]+(pts[i][0]-pts[i-1][0])*t;
+      const lng=pts[i-1][1]+(pts[i][1]-pts[i-1][1])*t;
+      return { pt:[lat,lng], brg:bearing(pts[i-1],pts[i]) };
+    }
+    acc+=seg;
+  }
+  const n=pts.length;
+  return { pt:pts[n-1], brg:bearing(pts[n-2],pts[n-1]) };
+}
+
+let ROUTES = { legs:{} };
+
+function legPoints(a,b){
+  const leg = ROUTES.legs?.[`${a}->${b}`];
+  if(leg?.points?.length > 1) return leg.points;
+  return [ll(a), ll(b)];
+}
+
+function clearLayerBucket(bucket){
+  const set = new Set(bucket);
+  bucket.forEach(l=>{ if(map.hasLayer(l)) map.removeLayer(l); });
+  for(let i=labels.length-1;i>=0;i--){
+    if(set.has(labels[i].marker)) labels.splice(i,1);
+  }
+  bucket.length=0;
+}
+
 const layers = { route:[], sea:[] };
 /* подписи с километражом показываем только когда карта достаточно приближена,
    иначе на Кавказе они наезжают друг на друга */
@@ -500,36 +545,32 @@ function syncLabels(){
 map.on("zoomend", syncLabels);
 
 function drawLeg(a, b, o={}){
-  const A = ll(a), B = ll(b);
+  const pts = legPoints(a,b);
   const bucket = o.sea ? layers.sea : layers.route;
 
-  const line = L.polyline([A,B],{
+  const line = L.polyline(pts,{
     color: o.sea ? "#2f7f8e" : (o.local ? "#3a6b52" : "#8e2f4a"),
     weight: o.sea ? 3 : (o.local ? 2.5 : 4),
     opacity: o.back ? .35 : .85,
     dashArray: o.sea ? "9,8" : (o.back ? "3,7" : null),
-    lineCap:"round"
+    lineCap:"round", lineJoin:"round", smoothFactor:1
   }).addTo(map);
   bucket.push(line);
 
   if(!o.back){
-    // 1–3 стрелки на отрезок, в зависимости от длины
-    const dist = map.distance(A,B);
-    const count = dist > 400000 ? 3 : dist > 120000 ? 2 : 1;
-    const brg = bearing(A,B);
+    const dist = pathLen(pts);
+    const count = dist > 400000 ? 5 : dist > 120000 ? 3 : dist > 30000 ? 2 : 1;
     for(let i=1;i<=count;i++){
-      const t = i/(count+1);
-      const mid = [A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t];
-      const arw = L.marker(mid,{
+      const { pt, brg } = alongPath(pts, i/(count+1));
+      const arw = L.marker(pt,{
         interactive:false,
         icon:L.divIcon({ className:"", iconSize:[18,18], iconAnchor:[9,9],
           html:`<div class="arrow${o.sea?" sea":""}" style="transform:rotate(${brg-90}deg)">➤</div>` })
       }).addTo(map);
       bucket.push(arw);
     }
-    // подпись с км и часами
     if(o.km && !o.local){
-      const mid = [(A[0]+B[0])/2, (A[1]+B[1])/2];
+      const mid = alongPath(pts, 0.5).pt;
       const lb = L.marker(mid,{ interactive:false,
         icon:L.divIcon({ className:"", iconSize:[0,0], iconAnchor:[0,26],
           html:`<div class="lbl${o.sea?" sea":""}">${o.km} км · ${o.hrs}</div>` })
@@ -567,18 +608,36 @@ function syncMarkers(){
 }
 map.on("zoomend", syncMarkers);
 
-LEGS.forEach(l=>drawLeg(l.from,l.to,l));
+function redrawMainRoute(){
+  clearLayerBucket(layers.route);
+  LEGS.forEach(l=>drawLeg(l.from,l.to,l));
+  syncLabels();
+}
+
+function fitAllRoutes(){
+  const pts = [];
+  LEGS.forEach(l=>legPoints(l.from,l.to).forEach(p=>pts.push(p)));
+  if(!pts.length) return;
+  map.fitBounds(L.latLngBounds(pts).pad(.12),
+    { paddingBottomRight: L.point(0, hiddenBySheet()) });
+}
+
+fetch("./routes.json")
+  .then(r=>r.ok ? r.json() : null)
+  .then(j=>{ if(j?.legs) ROUTES=j; })
+  .catch(()=>{})
+  .finally(()=>{
+    redrawMainRoute();
+    fitAllRoutes();
+    renderSea();
+  });
 
 /* ── море ── */
 let seaMode = "yeysk";
 const seaMarkers = [];
 
 function renderSea(){
-  layers.sea.forEach(l=>{ if(map.hasLayer(l)) map.removeLayer(l); });
-  for(let i=labels.length-1;i>=0;i--){
-    if(layers.sea.includes(labels[i].marker)) labels.splice(i,1);
-  }
-  layers.sea = [];
+  clearLayerBucket(layers.sea);
   seaMarkers.forEach(m=>map.removeLayer(m)); seaMarkers.length=0;
 
   const box = document.getElementById("seaBody");
@@ -734,9 +793,6 @@ setInterval(()=>{
 }, 7000);
 loveEl.style.transition = "opacity .45s ease";
 
-renderSea();
-map.fitBounds(L.latLngBounds(STOPS.map(s=>[s.lat,s.lng])).pad(.12),
-  { paddingBottomRight: L.point(0, hiddenBySheet()) });
 syncLabels();
 syncMarkers();
 </script>

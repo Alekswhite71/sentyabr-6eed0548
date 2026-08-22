@@ -2,10 +2,19 @@ name: Ежедневное уведомление
 
 on:
   schedule:
-    # 06:00 UTC = 09:00 по Москве
+    # 06:00 UTC = 09:00 по Москве — утро
     - cron: "0 6 * * *"
+    # 19:00 UTC = 22:00 по Москве — доброй ночи
+    - cron: "0 19 * * *"
   workflow_dispatch:
     inputs:
+      slot:
+        description: "Утро или вечер"
+        type: choice
+        options:
+          - morning
+          - night
+        default: morning
       dry_run:
         description: "Только показать текст, не отправлять"
         type: boolean
@@ -34,5 +43,6 @@ jobs:
           VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           PUSH_SUB: ${{ secrets.PUSH_SUB }}
+          PUSH_SLOT: ${{ github.event.schedule == '0 19 * * *' && 'night' || (inputs.slot || 'morning') }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
         run: node tools/send-push.mjs

@@ -34,6 +34,15 @@ function daysLeft(now = new Date()) {
   return Math.round((db - da) / 86400000);
 }
 
+export function composeNight(now = new Date()) {
+  const left = daysLeft(now);
+  const night = DATA.night || {};
+  const special = night.byDay && night.byDay[String(left)];
+  const body = special || night.body || "Доброй ночи, моя королева.";
+  const title = night.title || "♥ Доброй ночи";
+  return { title, body, tag: `night-${left}` };
+}
+
 export function compose(now = new Date()) {
   const left = daysLeft(now);
 
@@ -86,7 +95,22 @@ if (!isMain) {
 }
 
 async function main() {
-const msg = compose();
+const slot = process.env.PUSH_SLOT || "morning";
+const customTitle = process.env.PUSH_TITLE;
+const customBody = process.env.PUSH_BODY;
+
+let msg;
+if (customTitle || customBody) {
+  msg = {
+    title: customTitle || "♥",
+    body: customBody || "",
+    tag: "custom",
+  };
+} else if (slot === "night") {
+  msg = composeNight();
+} else {
+  msg = compose();
+}
 if (!msg) {
   console.log("Отпуск закончился — отправлять больше нечего.");
   process.exit(0);

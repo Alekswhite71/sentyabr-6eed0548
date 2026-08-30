@@ -1,6 +1,6 @@
 /* Service worker: офлайн-кэш + приём ежедневных пуш-уведомлений. */
 
-const CACHE = "nash-sentyabr-v6";
+const CACHE = "nash-sentyabr-v7";
 
 // то, без чего страница не откроется в самолётном режиме
 const CORE = [

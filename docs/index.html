@@ -456,8 +456,6 @@
     es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
   },{ threshold:.16, rootMargin:"0px 0px -6% 0px" });
 
-  document.querySelectorAll(".shot").forEach(el => io.observe(el));
-
   /* плавная автокарусель на обложке */
   (function(){
     const cover = document.getElementById("cover");

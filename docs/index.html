@@ -488,7 +488,7 @@
     <div class="sign">Люблю тебя.<br>До девятого сентября, моя Виктория.</div>
   </section>
 
-  <div class="credit">Сделано с любовью для одного человека.</div>
+  <div class="credit">Сделано с любовью для одного человека.<br><span style="opacity:.7">обновление · август 2026</span></div>
 </main>
 
 <script>
@@ -714,10 +714,19 @@
 
   let swReg = null;
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").then((r) => {
-      swReg = r;
-      refreshSetup();
-    }).catch(() => refreshSetup());
+    let reloading = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloading) return;
+      reloading = true;
+      location.reload();
+    });
+    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
+      .then((r) => {
+        swReg = r;
+        r.update().catch(() => {});
+        refreshSetup();
+      })
+      .catch(() => refreshSetup());
   }
 
   function b64ToU8(base64){

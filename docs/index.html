@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Наш сентябрь" />
-<meta name="description" content="9 — 29 сентября 2026. Три недели вдвоём." />
+<meta name="description" content="Для Виктории. От меня." />
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 <meta name="googlebot" content="noindex, nofollow" />
-<title>Виктории · сентябрь 2026</title>
+<title>Виктории · от меня</title>
 <link rel="manifest" href="./manifest.webmanifest" />
 <link rel="apple-touch-icon" href="./icons/icon-180.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
@@ -25,8 +25,6 @@
     --blush:#fdeef0;
     --rose:#d4677f;
     --wine:#8e2f4a;
-    --gold:#c9a227;
-    --sand:#f5e6e0;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth}
@@ -39,166 +37,88 @@
   .sheet{
     max-width:520px;margin:0 auto;
     background:
-      radial-gradient(circle at 15% 2%,#fff2f4,transparent 42%),
-      radial-gradient(circle at 88% 24%,#fdf3ec,transparent 38%),
+      radial-gradient(circle at 12% 4%,#fff2f4,transparent 42%),
+      radial-gradient(circle at 90% 28%,#fdf3ec,transparent 36%),
       var(--paper);
     min-height:100vh;
     overflow:hidden;
-    box-shadow:0 0 90px rgba(0,0,0,.6);
+    box-shadow:0 0 90px rgba(0,0,0,.55);
+    position:relative;
   }
 
-  /* ── обложка ── */
+  /* мягкие сердечки — не шумят, просто атмосфера */
+  .fx{pointer-events:none;position:fixed;inset:0;max-width:520px;margin:0 auto;left:0;right:0;z-index:1;overflow:hidden}
+  .fx i{
+    position:absolute;bottom:-24px;color:rgba(212,103,127,.28);font-style:normal;
+    animation:rise linear infinite;font-size:12px;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(0);opacity:0}
+    12%{opacity:.55}
+    100%{transform:translateY(-110vh) rotate(36deg);opacity:0}
+  }
+
   .cover{
-    position:relative;height:100svh;min-height:560px;
+    position:relative;z-index:2;
+    height:100svh;min-height:560px;
     display:flex;flex-direction:column;justify-content:flex-end;
-    padding:0 26px calc(46px + env(safe-area-inset-bottom));
+    padding:0 26px calc(42px + env(safe-area-inset-bottom));
     overflow:hidden;
   }
   .cover-img{
     position:absolute;inset:0;
-    background:#3a2028 center/cover no-repeat;
-    transform:scale(1.06);
-    animation:drift 26s ease-in-out infinite alternate;
+    background:#3a2028 center 22%/cover no-repeat;
+    transform:scale(1.04);
+    animation:drift 28s ease-in-out infinite alternate;
   }
-  @keyframes drift{from{transform:scale(1.06) translate(0,0)}to{transform:scale(1.14) translate(-2%,-2%)}}
+  @keyframes drift{
+    from{transform:scale(1.04) translate(0,0)}
+    to{transform:scale(1.1) translate(-1.5%,-1.5%)}
+  }
   .cover::after{
     content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(42,21,32,.42) 0%,rgba(42,21,32,.18) 32%,rgba(42,21,32,.82) 78%,rgba(42,21,32,.96) 100%);
+    background:
+      linear-gradient(180deg,rgba(42,21,32,.15) 0%,rgba(42,21,32,.08) 28%,rgba(42,21,32,.55) 62%,rgba(42,21,32,.92) 100%);
   }
   .cover-in{position:relative;z-index:2;color:#fff}
   .cover .to{
     font-size:11px;letter-spacing:.28em;text-transform:uppercase;
-    color:rgba(255,255,255,.82);font-weight:700;margin-bottom:16px;
+    color:rgba(255,255,255,.85);font-weight:700;margin-bottom:14px;
   }
   .cover h1{
     font-family:"Cormorant Garamond",Georgia,serif;
-    font-size:clamp(42px,13vw,60px);line-height:.94;font-weight:500;letter-spacing:-.02em;
-    text-shadow:0 4px 30px rgba(0,0,0,.5);
+    font-size:clamp(40px,12vw,56px);line-height:.96;font-weight:500;letter-spacing:-.02em;
+    text-shadow:0 4px 28px rgba(0,0,0,.45);
   }
   .cover h1 em{font-style:italic;display:block;color:#ffd9e0}
   .cover .sub{
-    margin-top:20px;font-family:"Cormorant Garamond",serif;font-style:italic;
-    font-size:19px;line-height:1.45;color:rgba(255,255,255,.94);
-    max-width:min(100%,26em);
-    text-shadow:0 2px 16px rgba(0,0,0,.5);
+    margin-top:16px;font-family:"Cormorant Garamond",serif;font-style:italic;
+    font-size:19px;line-height:1.45;color:rgba(255,255,255,.95);
+    max-width:min(100%,22em);
+    text-shadow:0 2px 16px rgba(0,0,0,.45);
   }
   .cover .dates{
-    margin-top:22px;display:inline-flex;align-items:center;gap:9px;
+    margin-top:20px;display:inline-flex;align-items:center;gap:9px;
     font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
     background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);
     backdrop-filter:blur(8px);padding:11px 18px;border-radius:999px;color:#fff;
   }
   .scrollhint{
     position:absolute;left:50%;transform:translateX(-50%);
-    bottom:calc(16px + env(safe-area-inset-bottom));z-index:3;
-    color:rgba(255,255,255,.6);font-size:19px;animation:bob 2.2s ease-in-out infinite;
+    bottom:calc(14px + env(safe-area-inset-bottom));z-index:3;
+    color:rgba(255,255,255,.55);font-size:18px;animation:bob 2.2s ease-in-out infinite;
   }
   @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 
-  /* ── письмо ── */
-  .letter{padding:52px 26px 44px;text-align:center;position:relative}
-  .letter::before{
-    content:"♥";position:absolute;top:20px;left:50%;transform:translateX(-50%);
-    color:var(--rose);font-size:15px;opacity:.55;
-  }
-  .letter p{
-    font-family:"Cormorant Garamond",serif;font-size:21px;line-height:1.62;
-    color:var(--ink);margin-bottom:18px;
-  }
-  .letter p:last-child{margin-bottom:0}
-  .letter em{font-style:italic;color:var(--wine)}
-  .letter .big{font-size:25px;color:var(--wine);font-weight:500}
-
-  .rule{display:flex;align-items:center;gap:12px;padding:0 26px;margin:8px 0 30px}
-  .rule::before,.rule::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(212,103,127,.5),transparent)}
-  .rule span{color:var(--rose);font-size:12px}
-
-  .lead{padding:0 26px 34px;text-align:center}
-  .lead .k{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--rose);font-weight:800}
-  .lead h2{font-family:"Cormorant Garamond",serif;font-size:33px;font-weight:500;line-height:1.1;margin:11px 0 12px}
-  .lead p{font-size:15px;line-height:1.6;color:var(--soft)}
-
-  /* ── лента моментов ── */
-  .timeline{padding:0 20px 20px;position:relative}
-  .card{
-    position:relative;margin-bottom:22px;border-radius:24px;overflow:hidden;
-    background:#fff;box-shadow:0 12px 36px rgba(42,21,32,.14);
-    opacity:0;transform:translateY(34px);
-    transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1);
-  }
-  .card.in{opacity:1;transform:none}
-  .card .img{height:210px;background:var(--sand) center/cover no-repeat;position:relative;display:block}
-  .card .img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,21,32,.03) 40%,rgba(42,21,32,.62))}
-  .card .tag{
-    position:absolute;top:13px;left:13px;z-index:2;
-    background:rgba(255,250,247,.94);color:var(--wine);
-    font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-    padding:6px 11px;border-radius:999px;box-shadow:0 3px 12px rgba(0,0,0,.2);
-  }
-  .card .ttl{
-    position:absolute;left:18px;right:18px;bottom:15px;z-index:2;color:#fff;
-    font-family:"Cormorant Garamond",serif;font-size:29px;font-weight:600;line-height:1.05;
-    text-shadow:0 3px 20px rgba(0,0,0,.55);
-  }
-  .card .body{padding:17px 19px 20px}
-  .card .body p{font-size:15px;line-height:1.62;color:var(--soft)}
-  .card .body p + p{margin-top:11px}
-  .card .whisper{
-    margin-top:14px;padding-top:13px;border-top:1px solid var(--sand);
-    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;
-    line-height:1.45;color:var(--wine);
-  }
-  .card.hero-card{box-shadow:0 16px 46px rgba(142,47,74,.26)}
-  .card.hero-card .body{background:linear-gradient(180deg,#fff4f6,#fff)}
-
-  .interlude{
-    text-align:center;padding:12px 34px 34px;
-    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:20px;
-    line-height:1.5;color:var(--wine);
-    opacity:0;transform:translateY(20px);
-    transition:opacity .9s ease,transform .9s ease;
-  }
-  .interlude.in{opacity:1;transform:none}
-
-  .maybe{
-    margin:0 20px 26px;padding:20px 21px;border-radius:22px;
-    background:linear-gradient(180deg,#f0f9fa,#fff);
-    border:1.5px dashed rgba(47,127,142,.45);
-    opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;
-  }
-  .maybe.in{opacity:1;transform:none}
-  .maybe .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#2f7f8e;font-weight:800}
-  .maybe h3{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;margin:8px 0 10px;color:var(--ink)}
-  .maybe p{font-size:14.5px;line-height:1.6;color:var(--soft)}
-  .maybe .mi{margin-top:14px;height:150px;border-radius:15px;background:var(--sand) center/cover no-repeat}
-
-  /* ── финал ── */
-  .finale{
-    position:relative;padding:60px 28px calc(66px + env(safe-area-inset-bottom));
-    text-align:center;overflow:hidden;
-    background:linear-gradient(180deg,#fffaf7 0%,#f7dfe4 45%,#8e2f4a 100%);
-  }
-  .finale .hh{color:var(--rose);font-size:17px;letter-spacing:.5em;margin-bottom:22px}
-  .finale h2{
-    font-family:"Cormorant Garamond",serif;font-size:35px;font-weight:500;
-    line-height:1.16;color:var(--ink);margin-bottom:20px;
-  }
-  .finale h2 em{font-style:italic;color:var(--wine);display:block}
-  .finale p{
-    font-family:"Cormorant Garamond",serif;font-size:20px;line-height:1.6;
-    color:#5c2b3a;max-width:26em;margin:0 auto 16px;
-  }
-  .finale p b{font-weight:600;color:var(--wine);letter-spacing:.04em}
-
-  /* ── счётчик до встречи ── */
   .countdown{
+    position:relative;z-index:2;
     margin:0;padding:34px 22px 30px;text-align:center;
-    background:linear-gradient(180deg,#8e2f4a,#a83f5c 60%,#c4566f);
-    color:#fff;position:relative;overflow:hidden;
+    background:linear-gradient(180deg,#8e2f4a,#a83f5c 55%,#c4566f);
+    color:#fff;overflow:hidden;
   }
   .countdown::before{
     content:"";position:absolute;inset:0;
-    background:radial-gradient(circle at 22% 12%,rgba(255,255,255,.22),transparent 46%);
+    background:radial-gradient(circle at 22% 12%,rgba(255,255,255,.2),transparent 46%);
   }
   .countdown .cin{position:relative;z-index:2}
   .countdown .k{
@@ -240,9 +160,9 @@
     line-height:1.25;padding:14px 0 4px;
   }
 
-  /* ── установка на домашний экран и уведомления ── */
   .setup{
-    margin:0 20px 26px;padding:20px 21px;border-radius:22px;
+    position:relative;z-index:2;
+    margin:22px 20px 8px;padding:20px 21px;border-radius:22px;
     background:linear-gradient(180deg,#fff2f5,#fff);
     border:1.5px solid rgba(212,103,127,.4);
     box-shadow:0 10px 30px rgba(142,47,74,.1);
@@ -296,42 +216,126 @@
     background:#fdf3e7;border:1px solid rgba(180,110,30,.28);
     color:#8a5a18;font-size:13.5px;line-height:1.55;
   }
+
+  .letter{
+    position:relative;z-index:2;
+    padding:48px 26px 28px;text-align:center;
+  }
+  .letter::before{
+    content:"♥";display:block;color:var(--rose);font-size:15px;opacity:.5;margin-bottom:16px;
+  }
+  .letter p{
+    font-family:"Cormorant Garamond",serif;font-size:21px;line-height:1.62;
+    color:var(--ink);margin-bottom:18px;
+  }
+  .letter p:last-child{margin-bottom:0}
+  .letter em{font-style:italic;color:var(--wine)}
+  .letter .big{font-size:25px;color:var(--wine);font-weight:500}
+
+  .tap{
+    position:relative;z-index:2;
+    display:block;width:calc(100% - 40px);margin:8px 20px 30px;padding:22px 20px;
+    border:0;border-radius:22px;text-align:center;cursor:pointer;font:inherit;
+    background:linear-gradient(180deg,#fff2f5,#fff);
+    border:1.5px solid rgba(212,103,127,.35);
+    box-shadow:0 12px 30px rgba(142,47,74,.1);
+    transition:transform .15s ease;
+  }
+  .tap:active{transform:translateY(1px)}
+  .tap .k{
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--rose);font-weight:800;
+  }
+  .tap h3{
+    font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;
+    margin:8px 0 10px;color:var(--ink);line-height:1.15;
+  }
+  .tap .secret{
+    font-family:"Cormorant Garamond",serif;font-style:italic;
+    font-size:19px;line-height:1.45;color:var(--wine);min-height:3.1em;
+  }
+  .tap .hint{margin-top:10px;font-size:12.5px;color:var(--soft)}
+
+  .phrases{
+    position:relative;z-index:2;
+    padding:4px 26px 20px;
+  }
+  .phrases .k{
+    text-align:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--rose);font-weight:800;margin-bottom:8px;
+  }
+  .phrases .lead{
+    text-align:center;font-family:"Cormorant Garamond",serif;font-style:italic;
+    font-size:18px;color:var(--soft);margin-bottom:18px;line-height:1.4;
+  }
+  .ph{
+    opacity:0;transform:translateY(18px);
+    transition:opacity .7s ease,transform .7s ease;
+    padding:18px 6px;border-top:1px solid rgba(212,103,127,.18);
+    text-align:center;
+  }
+  .ph.in{opacity:1;transform:none}
+  .ph span{
+    display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--rose);font-weight:800;margin-bottom:8px;
+  }
+  .ph p{
+    font-family:"Cormorant Garamond",serif;font-style:italic;
+    font-size:20px;line-height:1.5;color:var(--ink);
+  }
+
+  .finale{
+    position:relative;z-index:2;
+    padding:56px 28px calc(60px + env(safe-area-inset-bottom));
+    text-align:center;overflow:hidden;
+    background:linear-gradient(180deg,#fffaf7 0%,#f7dfe4 45%,#8e2f4a 100%);
+  }
+  .finale .hh{color:var(--rose);font-size:17px;letter-spacing:.5em;margin-bottom:20px}
+  .finale h2{
+    font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:500;
+    line-height:1.16;color:var(--ink);margin-bottom:18px;
+  }
+  .finale h2 em{font-style:italic;color:var(--wine);display:block}
+  .finale p{
+    font-family:"Cormorant Garamond",serif;font-size:20px;line-height:1.6;
+    color:#5c2b3a;max-width:26em;margin:0 auto 14px;
+  }
+  .finale p b{font-weight:600;color:var(--wine)}
   .finale .sign{
-    margin-top:34px;font-family:"Cormorant Garamond",serif;font-style:italic;
+    margin-top:32px;font-family:"Cormorant Garamond",serif;font-style:italic;
     font-size:23px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.3);
   }
-  .finale .cnt{
-    margin-top:26px;display:inline-block;background:rgba(255,255,255,.2);
-    border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(8px);
-    padding:13px 24px;border-radius:999px;color:#fff;
+  .credit{
+    position:relative;z-index:2;
+    padding:18px 26px 28px;text-align:center;font-size:10px;line-height:1.6;
+    color:rgba(255,255,255,.5);background:#8e2f4a;
   }
-  .finale .cnt b{font-family:"Cormorant Garamond",serif;font-size:29px;font-weight:600;display:block;line-height:1}
-  .finale .cnt span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;opacity:.9}
-
-  .credit{padding:20px 26px 30px;text-align:center;font-size:10px;line-height:1.6;color:rgba(255,255,255,.5);background:#8e2f4a}
 
   @media (min-width:560px){
-    .card .img{height:250px}
     .letter p{font-size:22px}
+    .ph p{font-size:22px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .fx,.cover-img{animation:none!important}
+    .ph{opacity:1;transform:none}
   }
 </style>
 </head>
 <body>
+<div class="fx" id="fx" aria-hidden="true"></div>
 <main class="sheet">
 
-  <!-- ОБЛОЖКА -->
   <header class="cover">
-    <div class="cover-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Elbrus_from_Cheget.jpg/1280px-Elbrus_from_Cheget.jpg')"></div>
+    <div class="cover-img" style="background-image:url('./photos/cover.jpg')"></div>
     <div class="cover-in">
       <div class="to">Виктории — от меня</div>
-      <h1>Три недели<em>только вдвоём</em></h1>
-      <p class="sub">Мы не виделись с мая. Я собрал сентябрь так, чтобы наверстать каждый из этих дней.</p>
-      <div class="dates">♥ 9 — 29 сентября 2026</div>
+      <h1>Только<em>для тебя</em></h1>
+      <p class="sub">Мы не виделись с мая. Просто листай — здесь только слова и ожидание.</p>
+      <div class="dates">♥ 9 сентября 2026</div>
     </div>
     <div class="scrollhint">↓</div>
   </header>
 
-  <!-- СЧЁТЧИК -->
   <section class="countdown">
     <div class="cin">
       <div class="k">до того, как я тебя обниму</div>
@@ -346,221 +350,82 @@
     </div>
   </section>
 
-  <!-- УСТАНОВКА НА ЭКРАН «ДОМОЙ» (только в браузере) -->
   <section class="setup" id="setupInstall" hidden>
     <div class="k">чтобы приходило каждый день</div>
     <h3>Добавь меня на домашний экран</h3>
-    <p>Тогда у тебя появится иконка с сердцем, а я смогу каждое утро присылать тебе,
-       сколько дней осталось, и несколько слов от себя.</p>
+    <p>Тогда у тебя появится иконка с сердцем, а я смогу каждое утро и каждый вечер
+       присылать тебе несколько слов.</p>
     <ol>
       <li>Нажми <span class="sq"><svg width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true"><path d="M6 1v7.5" stroke="#0a7cff" stroke-width="1.6" stroke-linecap="round"/><path d="M3.2 3.6 6 .9l2.8 2.7" stroke="#0a7cff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 6.4h-.2v6.2h8.4V6.4H10" stroke="#0a7cff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>Поделиться</b> внизу экрана</li>
       <li>Пролистай вниз до <b>«На экран „Домой“»</b></li>
-      <li>Нажми <b>«Добавить»</b> в правом верхнем углу</li>
-      <li>Открой меня уже <b>с иконки</b> — и увидишь кнопку для уведомлений</li>
+      <li>Нажми <b>«Добавить»</b></li>
+      <li>Открой уже <b>с иконки</b> — и включи уведомления</li>
     </ol>
-    <div class="warn">Без этого шага iPhone не разрешает присылать уведомления —
-      такое правило у Apple, ничего не поделать.</div>
+    <div class="warn">Без этого шага iPhone не разрешает уведомления — такое правило у Apple.</div>
   </section>
 
-  <!-- РАЗРЕШЕНИЕ УВЕДОМЛЕНИЙ (в установленном приложении) -->
   <section class="setup" id="setupPush" hidden>
     <div class="k">последний шаг</div>
     <h3>Включи уведомления</h3>
-    <p>Каждое утро в девять я буду присылать тебе, сколько осталось, и что-нибудь тёплое.
+    <p>Утром — счётчик и фраза. Вечером — «доброй ночи, моя королева».
        Больше ничего — обещаю.</p>
     <button class="btn" id="btnAllow">Разрешить уведомления</button>
     <div id="pushState"></div>
   </section>
 
-  <!-- ПИСЬМО -->
   <section class="letter">
     <p>Я очень долго считал эти дни. Сначала их было много, потом стало меньше, а теперь я знаю точное число — и оно наконец совсем маленькое.</p>
     <p class="big">Девятого сентября ты встретишь меня в Ростове.</p>
     <p>И <em>первые сутки мы не планировали</em>. Только ты, я и целый день, который никому не нужно ни с кем делить.</p>
-    <p>А потом — вот это всё, что дальше.</p>
+    <p>А дальше — просто быть рядом. Всё остальное приложится.</p>
   </section>
 
-  <div class="rule"><span>♥</span></div>
+  <button class="tap" id="tap" type="button">
+    <div class="k">нажми</div>
+    <h3>Слово для тебя</h3>
+    <div class="secret" id="secret">Я скучал так, что научился считать не дни, а часы.</div>
+    <div class="hint">ещё одно касание — другая фраза</div>
+  </button>
 
-  <div class="lead">
-    <div class="k">что нас ждёт</div>
-    <h2>От Дона до Эльбруса<br>и домой через Тулу</h2>
-    <p>Двадцать один день на машине: горы, суслики, альпаки, канатка выше облаков, очень длинные вечера — и Курск, где я познакомлюсь с твоими родителями.</p>
-  </div>
+  <section class="phrases">
+    <div class="k">фразы, которые я тебе пишу</div>
+    <p class="lead">Можно просто листать. Никуда не надо спешить.</p>
+    <div id="phraseList"></div>
+  </section>
 
-  <!-- ЛЕНТА -->
-  <div class="timeline">
-
-    <article class="card hero-card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Rostov-on-Don%2C_Don_River%2C_Rostov-on-Don%2C_Russia.jpg/1280px-Rostov-on-Don%2C_Don_River%2C_Rostov-on-Don%2C_Russia.jpg')">
-        <span class="tag">9 — 10 сентября</span>
-        <h3 class="ttl">Ростов. Ты и я</h3>
-      </div>
-      <div class="body">
-        <p>Самый главный день всей поездки, и в нём нет ни одного пункта программы. Набережная Дона на закате, Пушкинская, когда стемнеет, ужин, где мы забудем про телефоны.</p>
-        <p class="whisper">Всё остальное в этом письме — просто то, что случится после того, как я тебя обниму.</p>
-      </div>
-    </article>
-
-    <div class="interlude">а дальше мы поедем в сторону гор…</div>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Colonnade_%D0%9A%D0%BE%D0%BB%D0%BE%D0%BD%D0%BD%D0%B0%D0%B4%D0%B0.jpg/1280px-Colonnade_%D0%9A%D0%BE%D0%BB%D0%BE%D0%BD%D0%BD%D0%B0%D0%B4%D0%B0.jpg')">
-        <span class="tag">Кавказские Воды</span>
-        <h3 class="ttl">Пятигорск и Кисловодск</h3>
-      </div>
-      <div class="body">
-        <p>Мы не будем гнать до Эльбруса одним рывком. Остановимся на Водах: поднимемся на Машук за первым панорамным «ах», а в Кисловодске пойдём в Курортный парк — один из самых больших в Европе.</p>
-        <p class="whisper">Там можно идти час, ничего не говорить и всё равно всё друг другу сказать.</p>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Spermophilus_musicus_240981836.jpg/1280px-Spermophilus_musicus_240981836.jpg')">
-        <span class="tag">Джилы-Су</span>
-        <h3 class="ttl">Те самые суслики</h3>
-      </div>
-      <div class="body">
-        <p>Восемьдесят пять километров серпантина, а потом — целое поле, где они стоят столбиками и свистят друг другу про нас. Совсем не боятся людей. Рядом гремит водопад Султан, а Эльбрус с этой стороны такой близкий, что кажется ненастоящим.</p>
-        <p class="whisper">Я уже знаю, какое у тебя будет лицо. Ради него и едем.</p>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Alpaca_Portrait_%2826631626457%29.jpg/1280px-Alpaca_Portrait_%2826631626457%29.jpg')">
-        <span class="tag">парк «Симба» · Терскол</span>
-        <h3 class="ttl">Обнимемся с альпаками</h3>
-      </div>
-      <div class="body">
-        <p>Приедем специально к четырём часам: с 16:00 до 18:00 альпак выпускают из вольеров, и их можно гладить и кормить прямо на свободном выгуле. Там же ламы, козочки, кролики и бесплатный чай с печеньками.</p>
-        <p class="whisper">Место, куда приходят обниматься без повода. Нам повод и не нужен.</p>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Azau%2C_July_2019.jpg/1280px-Azau%2C_July_2019.jpg')">
-        <span class="tag">Азау → 3 847 м</span>
-        <h3 class="ttl">Канатка на Эльбрус</h3>
-      </div>
-      <div class="body">
-        <p>Самая высокая канатная дорога в Европе. Внизу сентябрь и плюс двадцать, наверху снег и около нуля, и обе вершины стоят так близко, что перестаёшь дышать. Возьми что-нибудь тёплое — я укрою, но лучше вдвойне.</p>
-        <p class="whisper">Хочу увидеть это первый раз именно с тобой.</p>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Side_view_of_the_Chegem_waterfalls.jpg/1280px-Side_view_of_the_Chegem_waterfalls.jpg')">
-        <span class="tag">если горы закроет облаками</span>
-        <h3 class="ttl">Чегем и Голубые озёра</h3>
-      </div>
-      <div class="body">
-        <p>Водопады бьют прямо из скальной щели, а Голубые озёра держат один и тот же нездешний цвет круглый год. Идеальный план на день, когда Эльбрус спрячется.</p>
-      </div>
-    </article>
-
-    <div class="interlude">…и, если захочется, свернём к морю</div>
-
-    <div class="maybe">
-      <div class="k">не главное, но очень возможно</div>
-      <h3>Один-два дня у моря</h3>
-      <p>Я специально не стал делать море основой поездки — пусть это будет наш каприз. Если в горах устанем или просто захочется лежать рядом и ничего не решать, свернём к воде на пару дней. Сентябрь — бархатный сезон, вода ещё совсем тёплая.</p>
-      <div class="mi" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gelendzhik_resort._View_of_the_bay_from_the_Tolstoy_Cape_embankment.jpg/1280px-Gelendzhik_resort._View_of_the_bay_from_the_Tolstoy_Cape_embankment.jpg')"></div>
-      <p style="margin-top:13px"><b>Решим вместе и на месте.</b> Ты скажешь «хочу море» — и мы поедем.</p>
-    </div>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Golden_Temple_Elista_Kalmykia.jpg/1280px-Golden_Temple_Elista_Kalmykia.jpg')">
-        <span class="tag">Элиста</span>
-        <h3 class="ttl">Золотая обитель Будды</h3>
-      </div>
-      <div class="body">
-        <p>Ночёвка ровно там, где Кавказ заканчивается и начинается степь. Самый большой буддийский храм в Европе — совершенно неожиданное место посреди дороги.</p>
-        <p class="whisper">Люблю такие остановки: мы туда не собирались, а запомним навсегда.</p>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Mamayev_Kurgan_Volgograd.jpg/1280px-Mamayev_Kurgan_Volgograd.jpg')">
-        <span class="tag">Волгоград</span>
-        <h3 class="ttl">Мамаев курган</h3>
-      </div>
-      <div class="body">
-        <p>Пройдём его снизу вверх, медленно, как и надо. Зайдём в Зал воинской славы, где всегда горит огонь. А вечером выйдем к Волге и будем долго молчать.</p>
-        <p class="whisper">Есть места, где просто хорошо держать друг друга за руку.</p>
-      </div>
-    </article>
-
-    <div class="interlude">…а потом — самое важное во всей поездке</div>
-
-    <article class="card hero-card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/City_center_of_Kursk.jpg/1280px-City_center_of_Kursk.jpg')">
-        <span class="tag">26 — 27 сентября · Курск</span>
-        <h3 class="ttl">Знакомство с твоими родителями</h3>
-      </div>
-      <div class="body">
-        <p>Это не просто ещё один город на обратном пути. Это то, ради чего вся вторая половина маршрута выстроена именно так.</p>
-        <p>В Курске я познакомлюсь с твоими мамой и папой. Потому что мы собираемся создать семью — а такие слова говорят вживую, глядя в глаза, а не по телефону и не в сообщениях.</p>
-        <p>Я заложил там два дня и ни одного километра за рулём в сам день встречи. Приедем заранее, выспимся, и я приду к ним не уставшим с дороги, а таким, каким должен прийти человек, который собирается быть с их дочерью всю жизнь.</p>
-        <p class="whisper">Я немного волнуюсь. Но хочу этого гораздо больше, чем волнуюсь. Хочу, чтобы они увидели, как я на тебя смотрю.</p>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Tula_asv2019-09_img04_Kremlin_aerial_view.jpg/1280px-Tula_asv2019-09_img04_Kremlin_aerial_view.jpg')">
-        <span class="tag">28 сентября · Тула</span>
-        <h3 class="ttl">Тихий город после главного</h3>
-      </div>
-      <div class="body">
-        <p>Кремль, набережная Упы, пряники и самовары. Но приедем мы сюда уже немного другими — с тем, что скажем в Курске, и с планами не на три недели, а гораздо дальше.</p>
-      </div>
-    </article>
-
-    <article class="card hero-card">
-      <div class="img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tula_YasnayaPolyana_asv2019-09_img11_LNTolstoy_House.jpg/1280px-Tula_YasnayaPolyana_asv2019-09_img11_LNTolstoy_House.jpg')">
-        <span class="tag">29 сентября · последний день</span>
-        <h3 class="ttl">Ясная Поляна</h3>
-      </div>
-      <div class="body">
-        <p>Усадьба Толстого в конце сентября — это золото, очень длинные аллеи и такая тишина, что слышно шаги. Лучшее место, чтобы закончить три недели.</p>
-        <p class="whisper">И там, среди этих аллей, мы договоримся, что следующая разлука будет короче.</p>
-      </div>
-    </article>
-
-  </div>
-
-  <!-- ФИНАЛ -->
   <section class="finale">
     <div class="hh">♥ ♥ ♥</div>
     <h2>Всё это — только повод<em>побыть с тобой рядом</em></h2>
-    <p>Можно вычеркнуть отсюда горы, суслики, море и все города. Останется главное: три недели, когда любовь всей моей жизни <b>РЯДОМ</b>.</p>
+    <p>Можно вычеркнуть горы, города и планы. Останется главное: дни, когда любовь всей моей жизни <b>РЯДОМ</b>.</p>
     <p>Я скучал так, что научился считать не дни, а часы. Спасибо, что ждала меня. Спасибо, что ты есть.</p>
-    <div class="cnt"><b>21</b><span>день вдвоём</span></div>
     <div class="sign">Люблю тебя.<br>До девятого сентября, моя Виктория.</div>
   </section>
 
-  <div class="credit">
-    Фотографии — Wikimedia Commons, лицензии CC BY / CC BY-SA.<br>
-    Сделано с любовью для одного человека.
-  </div>
-
+  <div class="credit">Сделано с любовью для одного человека.</div>
 </main>
 
 <script>
+  /* лёгкие сердечки */
+  (function(){
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const box = document.getElementById("fx");
+    for(let i=0;i<12;i++){
+      const el = document.createElement("i");
+      el.textContent = "♥";
+      el.style.left = (4 + Math.random()*92) + "%";
+      el.style.fontSize = (10 + Math.random()*14) + "px";
+      el.style.animationDuration = (12 + Math.random()*16) + "s";
+      el.style.animationDelay = (Math.random()*10) + "s";
+      box.appendChild(el);
+    }
+  })();
+
   const io = new IntersectionObserver(es=>{
     es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
-  },{ threshold:.14, rootMargin:"0px 0px -8% 0px" });
+  },{ threshold:.16, rootMargin:"0px 0px -6% 0px" });
 
-  document.querySelectorAll(".card,.interlude,.maybe").forEach(el=>io.observe(el));
-
-  /* ══════════ счётчик до встречи ══════════ */
-  /* Полдень, а не полночь: тогда в девять утра, когда приходит уведомление,
-     плитка «дней» показывает ровно то же число, что и в пуше. С полуночью
-     они расходились на единицу. То же время лежит в phrases.json. */
   const MEET = new Date("2026-09-09T12:00:00+03:00");
 
-  // тёплая фраза на каждый день ожидания.
-  // без чисел внутри текста — цифры живут только в счётчике выше,
-  // иначе они начинают спорить друг с другом
   const PHRASES = {
     18:"Это меньше, чем я уже прождал. Самое трудное позади, моя девочка.",
     17:"Я начал собирать вещи мысленно, и в каждом чемодане почему-то только ты.",
@@ -583,22 +448,44 @@
     0:"Я уже в пути к тебе, моя Виктория. Люблю тебя."
   };
   const FAR = [
-    "Считаю дни до тебя. Каждый следующий — ближе, чем предыдущий.",
+    "Считаю дни до тебя. Каждый следующий ближе, чем предыдущий.",
     "Где бы я ни был, я всё равно немного в Ростове, рядом с тобой.",
     "Скучаю. Это самое честное, что я могу написать сегодня.",
-    "Ты — лучшее, что случилось со мной. Скоро проверим это лично.",
+    "Ты лучшее, что случилось со мной. Скоро проверим это лично.",
     "Люблю тебя. Просто чтобы ты знала это и сегодня тоже."
   ];
+  const SECRETS = [
+    "Я скучал так, что научился считать не дни, а часы.",
+    "Где бы я ни был — я всё равно немного рядом с тобой.",
+    "Ты лучшее, что случилось со мной.",
+    "Доброй ночи, моя королева — даже днём.",
+    "Хочу просто держать тебя за руку и ничего не решать.",
+    "Скоро. Очень скоро."
+  ];
 
-  /* Фразы выше — резервная копия на случай офлайна.
-     Основной источник — phrases.json, его же читает ежедневная отправка пушей,
-     поэтому в уведомлении и на странице всегда один и тот же текст. */
+  function renderPhrases(){
+    const list = document.getElementById("phraseList");
+    list.innerHTML = "";
+    const keys = Object.keys(PHRASES).map(Number).sort((a,b)=>b-a);
+    keys.forEach(d=>{
+      const el = document.createElement("div");
+      el.className = "ph";
+      const label = d === 0 ? "в день встречи"
+        : d === 1 ? "за 1 день"
+        : `за ${d} ${plural(d,"день","дня","дней")}`;
+      el.innerHTML = `<span>${label}</span><p>${PHRASES[d]}</p>`;
+      list.appendChild(el);
+      io.observe(el);
+    });
+  }
+
   fetch("./phrases.json", { cache:"no-cache" })
-    .then((r) => (r.ok ? r.json() : null))
-    .then((j) => {
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
       if(!j) return;
       if(j.phrases) Object.assign(PHRASES, j.phrases);
       if(Array.isArray(j.far) && j.far.length) FAR.splice(0, FAR.length, ...j.far);
+      renderPhrases();
       tick();
     })
     .catch(() => {});
@@ -612,7 +499,6 @@
   }
 
   function daysUntilMeet(){
-    // считаем по календарным дням, а не по остатку часов
     const now = new Date();
     const t = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const m = new Date(MEET.getFullYear(), MEET.getMonth(), MEET.getDate());
@@ -655,8 +541,15 @@
     const el = document.getElementById("todayPhrase");
     if(el.textContent !== ph) el.textContent = ph;
   }
+  renderPhrases();
   tick();
   setInterval(tick, 1000);
+
+  let si = 0;
+  document.getElementById("tap").onclick = () => {
+    si = (si + 1) % SECRETS.length;
+    document.getElementById("secret").textContent = SECRETS[si];
+  };
 
   /* ══════════ приложение и уведомления ══════════ */
   const VAPID_PUBLIC = "BJeDNWDIJ2xLxrNxilPO_GNAPfHTajmkxAZAwdEkwFvroNXm15aQOE1l3za_5WZMrqsqsPmf-IwCIfOiC9z4E4w";
@@ -686,7 +579,6 @@
     const boxPush = document.getElementById("setupPush");
     const state = document.getElementById("pushState");
 
-    // уже подписана — ничего не показываем
     if(installed && swReg){
       const sub = await swReg.pushManager.getSubscription().catch(() => null);
       if(sub && Notification.permission === "granted"){
@@ -694,7 +586,7 @@
         boxPush.hidden = false;
         document.getElementById("btnAllow").hidden = true;
         state.innerHTML =
-          '<div class="ok">Всё готово. Уведомления включены — жди меня каждое утро. ♥</div>' +
+          '<div class="ok">Всё готово. Уведомления включены — жди меня каждое утро и каждый вечер. ♥</div>' +
           '<button class="btn ghost" id="btnShow">Показать код для Котика</button>';
         document.getElementById("btnShow").onclick = () => showCode(sub);
         return;
@@ -702,7 +594,6 @@
     }
 
     if(!installed){
-      // инструкция про «Поделиться → На экран Домой» осмысленна только на iPhone и iPad
       const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
         (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
       boxInstall.hidden = !isApple;
@@ -741,7 +632,7 @@
         try{
           if(navigator.share) await navigator.share({ title:"Код для уведомлений", text });
           else { await navigator.clipboard.writeText(text); b.textContent = "Скопировано ✓"; }
-        }catch(_){ /* закрыла окно — не страшно */ }
+        }catch(_){}
       };
       state.appendChild(b);
     }
@@ -761,7 +652,6 @@
         btnAllow.disabled = false;
         return;
       }
-      // она могла нажать быстрее, чем зарегистрировался service worker
       if(!swReg) swReg = await navigator.serviceWorker.ready;
 
       const sub = await swReg.pushManager.subscribe({
@@ -774,16 +664,13 @@
         'чтобы он подключил тебя. Один раз — и всё.</div>';
       showCode(sub);
 
-      /* Пробное уведомление показываем через service worker: на iOS конструктор
-         new Notification() запрещён и падает с ошибкой. Отдельный catch, чтобы
-         неудачная проверка связи не выглядела как провал всей подписки. */
       try{
         await swReg.showNotification("♥ Проверка связи", {
           body: "Вот так это будет выглядеть каждое утро.",
           icon: "./icons/icon-192.png",
           tag: "hello"
         });
-      }catch(_){ /* не страшно, подписка уже оформлена */ }
+      }catch(_){}
     }catch(err){
       state.innerHTML = '<div class="warn">Что-то не получилось: ' +
         (err && err.message ? err.message : "неизвестная ошибка") +
@@ -796,14 +683,13 @@
   refreshSetup();
   window.addEventListener("focus", refreshSetup);
 
-  // мягкий параллакс обложки
   const ci = document.querySelector(".cover-img");
   let raf = null;
   addEventListener("scroll",()=>{
     if(raf) return;
     raf = requestAnimationFrame(()=>{
       const y = Math.min(scrollY, innerHeight);
-      ci.style.transform = `scale(1.08) translateY(${y*0.28}px)`;
+      ci.style.transform = `scale(1.06) translateY(${y*0.22}px)`;
       raf = null;
     });
   },{ passive:true });

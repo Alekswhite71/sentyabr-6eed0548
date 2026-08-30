@@ -1,13 +1,13 @@
 /* Service worker: офлайн-кэш + приём ежедневных пуш-уведомлений. */
 
-const CACHE = "nash-sentyabr-v2";
+const CACHE = "nash-sentyabr-v3";
 
 // то, без чего страница не откроется в самолётном режиме
 const CORE = [
   "./",
   "./index.html",
   "./phrases.json",
-  "./routes.json",
+  "./photos/cover.jpg",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png"

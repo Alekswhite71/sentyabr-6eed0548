@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Вариант 2 · Романтическая открытка</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Manrope:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{ --ink:#2a1520; --wine:#8e2f4a; --rose:#d4677f; --paper:#fffaf7; --soft:#6b4351; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#1a0c12;font-family:Manrope,sans-serif;color:var(--ink)}
+  .label{position:sticky;top:0;z-index:9;background:#8e2f4a;color:#fff;text-align:center;
+    padding:10px 14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+  .sheet{max-width:390px;margin:0 auto;background:
+    radial-gradient(circle at 12% 8%,#fff2f4,transparent 40%),
+    radial-gradient(circle at 90% 30%,#fdf3ec,transparent 36%),
+    var(--paper);min-height:100vh;overflow:hidden;position:relative}
+  .hearts{pointer-events:none;position:absolute;inset:0;overflow:hidden;z-index:1}
+  .hearts i{position:absolute;bottom:-20px;color:rgba(212,103,127,.35);font-style:normal;
+    animation:rise linear infinite;font-size:14px}
+  @keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.7}100%{transform:translateY(-110vh) rotate(40deg);opacity:0}}
+  .cover{height:78vh;min-height:460px;position:relative;display:flex;align-items:flex-end;padding:28px;z-index:2;
+    background:linear-gradient(180deg,rgba(42,21,32,.15),rgba(42,21,32,.94)),
+      url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Elbrus_from_Cheget.jpg/960px-Elbrus_from_Cheget.jpg') center/cover}
+  .cover .to{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.85);font-weight:700;margin-bottom:14px}
+  .cover h1{font-family:"Cormorant Garamond",serif;font-size:46px;line-height:.94;color:#fff;font-weight:500;
+    text-shadow:0 6px 40px rgba(0,0,0,.45)}
+  .cover h1 em{font-style:italic;display:block;color:#ffd9e0}
+  .cover p{margin-top:16px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:rgba(255,255,255,.94);max-width:18em}
+  .pill{margin-top:18px;display:inline-flex;gap:8px;align-items:center;padding:10px 16px;border-radius:999px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);color:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  .cd{position:relative;z-index:2;background:linear-gradient(180deg,#8e2f4a,#c4566f);color:#fff;padding:30px 20px;text-align:center}
+  .cd::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.22),transparent 45%)}
+  .cd .cin{position:relative}
+  .cd .k{font-size:9px;letter-spacing:.22em;text-transform:uppercase;opacity:.85;font-weight:800}
+  .cd h2{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:25px;margin:8px 0 16px;font-weight:500}
+  .clock{display:flex;gap:6px;justify-content:center}
+  .u{flex:1;max-width:76px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:11px 4px;backdrop-filter:blur(6px)}
+  .u b{display:block;font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:600}
+  .u span{font-size:8px;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+  .today{margin-top:18px;background:rgba(255,255,255,.95);color:var(--wine);border-radius:16px;padding:15px 16px;
+    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;line-height:1.45;box-shadow:0 10px 28px rgba(0,0,0,.2)}
+  .today small{display:block;font-family:Manrope,sans-serif;font-style:normal;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--rose);margin-bottom:7px;font-weight:800}
+  .letter{position:relative;z-index:2;padding:44px 26px 28px;text-align:center}
+  .letter::before{content:"♥";color:var(--rose);opacity:.5;display:block;margin-bottom:14px;font-size:14px}
+  .letter p{font-family:"Cormorant Garamond",serif;font-size:21px;line-height:1.62;margin-bottom:16px}
+  .letter .big{font-size:25px;color:var(--wine)}
+  .tap{position:relative;z-index:2;margin:8px 22px 28px;padding:22px 20px;border-radius:22px;text-align:center;
+    background:linear-gradient(180deg,#fff2f5,#fff);border:1.5px solid rgba(212,103,127,.35);
+    box-shadow:0 12px 30px rgba(142,47,74,.12);cursor:pointer}
+  .tap .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);font-weight:800}
+  .tap h3{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;margin:8px 0 10px;color:var(--ink)}
+  .tap p{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;line-height:1.45;color:var(--wine);min-height:3.2em}
+  .tap .hint{margin-top:10px;font-size:12px;color:var(--soft)}
+  .phrases{position:relative;z-index:2;padding:6px 22px 10px}
+  .phrases .k{text-align:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);font-weight:800;margin-bottom:16px}
+  .ph{margin-bottom:18px;padding:18px 4px;border-top:1px solid rgba(212,103,127,.18);
+    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:20px;line-height:1.5;color:var(--ink);text-align:center}
+  .ph span{display:block;font-family:Manrope,sans-serif;font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;font-weight:800}
+  .finale{position:relative;z-index:2;padding:52px 26px 60px;text-align:center;background:linear-gradient(180deg,#fffaf7,#f7dfe4 42%,#8e2f4a)}
+  .finale .hh{color:var(--rose);letter-spacing:.45em;margin-bottom:18px}
+  .finale h2{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:500;line-height:1.15;margin-bottom:16px}
+  .finale h2 em{display:block;font-style:italic;color:var(--wine)}
+  .finale p{font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.55;color:#5c2b3a}
+  .sign{margin-top:30px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:22px;color:#fff}
+</style>
+</head>
+<body>
+<div class="label">Вариант 2 · Романтическая открытка · фразы + «слово для тебя» + сердечки</div>
+<main class="sheet">
+  <div class="hearts" id="hearts"></div>
+  <header class="cover">
+    <div>
+      <div class="to">Виктории — от меня</div>
+      <h1>Только<em>для тебя</em></h1>
+      <p>Мы не виделись с мая. Я считаю дни — и каждый следующий ближе.</p>
+      <div class="pill">♥ 9 сентября 2026</div>
+    </div>
+  </header>
+  <section class="cd"><div class="cin">
+    <div class="k">до того, как я тебя обниму</div>
+    <h2>9 сентября · Ростов</h2>
+    <div class="clock">
+      <div class="u"><b>10</b><span>дней</span></div>
+      <div class="u"><b>02</b><span>часа</span></div>
+      <div class="u"><b>14</b><span>минут</span></div>
+      <div class="u"><b>37</b><span>секунд</span></div>
+    </div>
+    <div class="today"><small>слова на сегодня</small>Люблю тебя больше, чем умею объяснить. И с каждым днём сильнее.</div>
+  </div></section>
+  <section class="letter">
+    <p>Я очень долго считал эти дни. Теперь знаю точное число — и оно наконец совсем маленькое.</p>
+    <p class="big">Девятого сентября ты встретишь меня в Ростове.</p>
+    <p>И первые сутки мы не планировали. Только ты и я.</p>
+  </section>
+  <button class="tap" id="tap" type="button">
+    <div class="k">нажми</div>
+    <h3>Слово для тебя</h3>
+    <p id="secret">Я скучал так, что научился считать не дни, а часы.</p>
+    <div class="hint">ещё одно касание — другая фраза</div>
+  </button>
+  <section class="phrases">
+    <div class="k">фразы, которые я тебе пишу</div>
+    <div class="ph"><span>за 10 дней</span>Люблю тебя больше, чем умею объяснить.</div>
+    <div class="ph"><span>за неделю</span>Скоро я буду смотреть на тебя, а не на фотографию.</div>
+    <div class="ph"><span>за день</span>Завтра я тебя обниму и не отпущу очень долго.</div>
+  </section>
+  <section class="finale">
+    <div class="hh">♥ ♥ ♥</div>
+    <h2>Всё это — только повод<em>побыть с тобой рядом</em></h2>
+    <p>Останется главное: ты. И я. И дни, которые мы наконец проведём вместе.</p>
+    <div class="sign">Люблю тебя.<br>До девятого, моя Виктория.</div>
+  </section>
+</main>
+<script>
+  const box=document.getElementById("hearts");
+  for(let i=0;i<14;i++){
+    const el=document.createElement("i");
+    el.textContent="♥";
+    el.style.left=(6+Math.random()*88)+"%";
+    el.style.fontSize=(10+Math.random()*16)+"px";
+    el.style.animationDuration=(10+Math.random()*14)+"s";
+    el.style.animationDelay=(Math.random()*8)+"s";
+    box.appendChild(el);
+  }
+  const words=[
+    "Я скучал так, что научился считать не дни, а часы.",
+    "Где бы я ни был — я всё равно немного рядом с тобой.",
+    "Ты лучшее, что случилось со мной.",
+    "Доброй ночи, моя королева — даже днём."
+  ];
+  let i=0;
+  document.getElementById("tap").onclick=()=>{
+    i=(i+1)%words.length;
+    document.getElementById("secret").textContent=words[i];
+  };
+</script>
+</body>
+</html>

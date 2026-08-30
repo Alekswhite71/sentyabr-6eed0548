@@ -10,7 +10,7 @@
 import { readFileSync } from "node:fs";
 
 const MEET_KEY = "meet";
-const DATA = JSON.parse(readFileSync(new URL("../docs/phrases.json", import.meta.url), "utf8"));
+const DATA = JSON.parse(readFileSync(new URL("../phrases.full.json", import.meta.url), "utf8"));
 
 const meet = new Date(DATA[MEET_KEY]);
 const TRIP_DAYS = 21;

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Вариант 3 · Конверт</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Manrope:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{ --ink:#2a1520; --wine:#8e2f4a; --rose:#d4677f; --paper:#fffaf7; --soft:#6b4351; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#1a0c12;font-family:Manrope,sans-serif;color:var(--ink)}
+  .label{position:sticky;top:0;z-index:9;background:#8e2f4a;color:#fff;text-align:center;
+    padding:10px 14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+  .sheet{max-width:390px;margin:0 auto;background:var(--paper);min-height:100vh;overflow:hidden}
+  .stage{min-height:100vh;display:grid;place-items:center;padding:40px 24px 60px;
+    background:
+      radial-gradient(circle at 50% 20%,rgba(212,103,127,.18),transparent 50%),
+      linear-gradient(180deg,#2a1520,#4a1f30 60%,#8e2f4a)}
+  .env{
+    width:100%;max-width:320px;aspect-ratio:1.35;position:relative;cursor:pointer;
+    transform-style:preserve-3d;transition:transform .5s ease;
+  }
+  .env:active{transform:scale(.98)}
+  .back,.front,.flap,.seal{
+    position:absolute;inset:0;border-radius:8px;
+  }
+  .back{background:linear-gradient(160deg,#a83f5c,#6d2438);box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  .front{background:linear-gradient(180deg,#fffaf7,#f8e8eb);clip-path:polygon(0 38%,50% 68%,100% 38%,100% 100%,0 100%);
+    display:flex;align-items:flex-end;justify-content:center;padding-bottom:28px}
+  .front span{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:22px;color:var(--wine)}
+  .flap{background:linear-gradient(180deg,#c4566f,#8e2f4a);clip-path:polygon(0 0,100% 0,50% 52%);
+    transform-origin:top center;transition:transform .7s cubic-bezier(.2,.8,.2,1);z-index:2}
+  .env.open .flap{transform:rotateX(180deg)}
+  .seal{width:54px;height:54px;left:50%;top:42%;transform:translate(-50%,-50%);border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#e8a0b0,#8e2f4a);border:2px solid rgba(255,255,255,.35);
+    display:grid;place-items:center;color:#fff;font-size:22px;z-index:3;box-shadow:0 8px 20px rgba(0,0,0,.35);
+    transition:opacity .4s ease,transform .4s ease}
+  .env.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.6)}
+  .hint{margin-top:28px;text-align:center;color:rgba(255,255,255,.75);font-size:13px;letter-spacing:.08em}
+  .letter{
+    display:none;padding:36px 26px 50px;text-align:center;animation:up .7s ease both;
+    background:
+      radial-gradient(circle at 15% 0%,#fff2f4,transparent 40%),
+      var(--paper);
+  }
+  .sheet.opened .stage{display:none}
+  .sheet.opened .letter{display:block}
+  @keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  .letter .to{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--rose);font-weight:800;margin-bottom:14px}
+  .letter h1{font-family:"Cormorant Garamond",serif;font-size:40px;line-height:1;font-weight:500;margin-bottom:18px}
+  .letter h1 em{font-style:italic;color:var(--wine);display:block}
+  .cd{margin:22px 0;padding:22px 16px;border-radius:20px;background:linear-gradient(180deg,#8e2f4a,#a83f5c);color:#fff}
+  .cd .k{font-size:9px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;font-weight:800}
+  .cd b{display:block;font-family:"Cormorant Garamond",serif;font-size:42px;font-weight:600;margin:6px 0 2px}
+  .cd span{font-size:12px;opacity:.9}
+  .today{margin-top:14px;padding:14px;border-radius:14px;background:rgba(255,255,255,.94);color:var(--wine);
+    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;line-height:1.4}
+  .letter p{font-family:"Cormorant Garamond",serif;font-size:20px;line-height:1.6;margin:14px 0;color:var(--ink)}
+  .letter .big{font-size:24px;color:var(--wine)}
+  .sign{margin-top:28px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:21px;color:var(--wine)}
+  .note{margin-top:34px;padding-top:20px;border-top:1px solid rgba(212,103,127,.25);font-size:12px;color:var(--soft);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="label">Вариант 3 · Конверт · сначала закрыто, потом письмо и счётчик</div>
+<main class="sheet" id="sheet">
+  <div class="stage">
+    <div>
+      <div class="env" id="env" role="button" aria-label="Открыть письмо">
+        <div class="back"></div>
+        <div class="front"><span>для Виктории</span></div>
+        <div class="flap"></div>
+        <div class="seal">♥</div>
+      </div>
+      <div class="hint">нажми на конверт</div>
+    </div>
+  </div>
+  <section class="letter">
+    <div class="to">открыто · только для тебя</div>
+    <h1>Моя<em>Виктория</em></h1>
+    <div class="cd">
+      <div class="k">до встречи</div>
+      <b>10</b>
+      <span>дней · 9 сентября · Ростов</span>
+      <div class="today">Люблю тебя больше, чем умею объяснить. И с каждым днём сильнее.</div>
+    </div>
+    <p>Я очень долго считал эти дни. Теперь их почти нет.</p>
+    <p class="big">Девятого сентября ты встретишь меня в Ростове.</p>
+    <p>Первые сутки — без плана. Только ты и я.</p>
+    <div class="sign">Люблю тебя.<br>Твой Котик</div>
+    <div class="note">Маршрута здесь нет — только слова. Карта остаётся отдельно, для меня.</div>
+  </section>
+</main>
+<script>
+  const env=document.getElementById("env");
+  const sheet=document.getElementById("sheet");
+  env.onclick=()=>{
+    env.classList.add("open");
+    setTimeout(()=>sheet.classList.add("opened"), 650);
+  };
+env.classList.add('open'); sheet.classList.add('opened');
+</script>
+</body>
+</html>

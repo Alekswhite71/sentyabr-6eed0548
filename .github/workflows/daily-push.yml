@@ -24,6 +24,9 @@ concurrency:
   group: daily-push
   cancel-in-progress: false
 
+permissions:
+  contents: write
+
 jobs:
   push:
     runs-on: ubuntu-latest
@@ -39,10 +42,28 @@ jobs:
         run: npm install --no-save web-push@3
 
       - name: Отправить
+        id: send
         env:
           VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           PUSH_SUB: ${{ secrets.PUSH_SUB }}
           PUSH_SLOT: ${{ github.event.schedule == '0 19 * * *' && 'night' || (inputs.slot || 'morning') }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
-        run: node tools/send-push.mjs
+        run: |
+          echo "SLOT=$PUSH_SLOT" >> "$GITHUB_ENV"
+          node tools/send-push.mjs
+
+      # После утреннего пуша открываем на сайте только уже известные фразы
+      - name: Открыть сегодняшнюю фразу на сайте
+        if: ${{ success() && env.SLOT == 'morning' && inputs.dry_run != true }}
+        run: |
+          node tools/unlock-phrases.mjs
+          if git diff --quiet docs/phrases.json; then
+            echo "изменений нет"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/phrases.json
+          git commit -m "Открыть фразу дня на сайте"
+          git push

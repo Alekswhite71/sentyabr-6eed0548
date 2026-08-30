@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { compose } from "./send-push.mjs";
 
 const MEET = new Date(
-  JSON.parse(readFileSync(new URL("../docs/phrases.json", import.meta.url), "utf8")).meet
+  JSON.parse(readFileSync(new URL("../phrases.full.json", import.meta.url), "utf8")).meet
 );
 
 /** Число «дней», которое в этот момент показывает плитка счётчика на странице. */

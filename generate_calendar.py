@@ -5,8 +5,8 @@
 Это резервный вариант: основной способ — настоящие пуши через GitHub Actions.
 Календарь пригодится, если пуши по какой-то причине не заработают.
 
-Тексты берутся из docs/phrases.json — того же файла, что читают страница
-и ежедневная отправка, чтобы формулировки нигде не разъезжались."""
+Тексты берутся из phrases.full.json — полного набора фраз.
+Публичный docs/phrases.json содержит только уже открытые дни."""
 
 import json
 from datetime import date, datetime, timedelta
@@ -16,7 +16,7 @@ MEET = date(2026, 9, 9)
 START = date(2026, 8, 22)
 HOUR_UTC = 6  # 09:00 MSK = 06:00 UTC
 
-SRC = json.loads((Path(__file__).parent / "docs" / "phrases.json").read_text("utf-8"))
+SRC = json.loads((Path(__file__).parent / "phrases.full.json").read_text("utf-8"))
 
 # тексты приходят из docs/phrases.json — один источник для страницы,
 # пушей и календаря

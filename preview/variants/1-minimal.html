@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Вариант 1 · Письмо и счётчик</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Manrope:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{ --ink:#2a1520; --wine:#8e2f4a; --rose:#d4677f; --paper:#fffaf7; --soft:#6b4351; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#1a0c12;font-family:Manrope,sans-serif;color:var(--ink)}
+  .label{position:sticky;top:0;z-index:9;background:#8e2f4a;color:#fff;text-align:center;
+    padding:10px 14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+  .sheet{max-width:390px;margin:0 auto;background:var(--paper);min-height:100vh;overflow:hidden}
+  .cover{height:72vh;min-height:420px;position:relative;display:flex;align-items:flex-end;padding:28px;
+    background:linear-gradient(180deg,rgba(42,21,32,.2),rgba(42,21,32,.92)),
+      url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Elbrus_from_Cheget.jpg/960px-Elbrus_from_Cheget.jpg') center/cover}
+  .cover .to{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.8);font-weight:700;margin-bottom:12px}
+  .cover h1{font-family:"Cormorant Garamond",serif;font-size:44px;line-height:.95;color:#fff;font-weight:500}
+  .cover h1 em{font-style:italic;display:block;color:#ffd9e0}
+  .cover p{margin-top:14px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;color:rgba(255,255,255,.92);max-width:18em}
+  .cd{background:linear-gradient(180deg,#8e2f4a,#a83f5c);color:#fff;padding:28px 20px;text-align:center}
+  .cd .k{font-size:9px;letter-spacing:.22em;text-transform:uppercase;opacity:.85;font-weight:800}
+  .cd h2{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:24px;margin:8px 0 16px;font-weight:500}
+  .clock{display:flex;gap:6px;justify-content:center}
+  .u{flex:1;max-width:76px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:12px;padding:10px 4px}
+  .u b{display:block;font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600}
+  .u span{font-size:8px;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+  .today{margin-top:16px;background:#fff;color:var(--wine);border-radius:14px;padding:14px 16px;
+    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;line-height:1.4}
+  .today small{display:block;font-family:Manrope,sans-serif;font-style:normal;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--rose);margin-bottom:6px;font-weight:800}
+  .letter{padding:40px 26px;text-align:center}
+  .letter p{font-family:"Cormorant Garamond",serif;font-size:20px;line-height:1.6;margin-bottom:16px}
+  .letter .big{font-size:24px;color:var(--wine)}
+  .finale{padding:48px 26px 56px;text-align:center;background:linear-gradient(180deg,#fffaf7,#f7dfe4 50%,#8e2f4a)}
+  .finale h2{font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:500;line-height:1.15;margin-bottom:14px}
+  .finale h2 em{display:block;font-style:italic;color:var(--wine)}
+  .finale p{font-family:"Cormorant Garamond",serif;font-size:18px;line-height:1.55;color:#5c2b3a}
+  .sign{margin-top:28px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:20px;color:#fff}
+</style>
+</head>
+<body>
+<div class="label">Вариант 1 · Письмо и счётчик · без маршрута · лёгкие эффекты</div>
+<main class="sheet">
+  <header class="cover">
+    <div>
+      <div class="to">Виктории — от меня</div>
+      <h1>Осталось<em>совсем немного</em></h1>
+      <p>Мы не виделись с мая. Скоро я буду рядом.</p>
+    </div>
+  </header>
+  <section class="cd">
+    <div class="k">до того, как я тебя обниму</div>
+    <h2>9 сентября · Ростов</h2>
+    <div class="clock">
+      <div class="u"><b>10</b><span>дней</span></div>
+      <div class="u"><b>02</b><span>часа</span></div>
+      <div class="u"><b>14</b><span>минут</span></div>
+      <div class="u"><b>37</b><span>секунд</span></div>
+    </div>
+    <div class="today"><small>слова на сегодня</small>Люблю тебя больше, чем умею объяснить. И с каждым днём сильнее.</div>
+  </section>
+  <section class="letter">
+    <p>Я очень долго считал эти дни. Сначала их было много — теперь почти нет.</p>
+    <p class="big">Девятого сентября ты встретишь меня в Ростове.</p>
+    <p>И первые сутки мы не планировали. Только ты, я и целый день.</p>
+  </section>
+  <section class="finale">
+    <h2>Всё остальное<em>только повод быть рядом</em></h2>
+    <p>Спасибо, что ждала меня. Спасибо, что ты есть.</p>
+    <div class="sign">Люблю тебя.<br>До девятого, моя Виктория.</div>
+  </section>
+</main>
+</body>
+</html>

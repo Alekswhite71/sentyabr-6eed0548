@@ -1,6 +1,6 @@
 /* Service worker: офлайн-кэш + приём ежедневных пуш-уведомлений. */
 
-const CACHE = "nash-sentyabr-v5";
+const CACHE = "nash-sentyabr-v6";
 
 // то, без чего страница не откроется в самолётном режиме
 const CORE = [
@@ -8,6 +8,12 @@ const CORE = [
   "./index.html",
   "./phrases.json",
   "./photos/cover.jpg",
+  "./photos/01-tulips.jpg",
+  "./photos/02-kiss-forehead.jpg",
+  "./photos/03-lake.jpg",
+  "./photos/04-cat.jpg",
+  "./photos/05-kiss.jpg",
+  "./photos/06-mirror.jpg",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
@@ -31,7 +37,7 @@ self.addEventListener("activate", (e) => {
 });
 
 /* Стратегия: сеть вперёд, кэш как подстраховка.
-   Фотографии с Wikimedia кэшируем после первой загрузки, чтобы открытка
+   Свои фотографии кэшируем после первой загрузки, чтобы открытка
    работала без интернета. */
 self.addEventListener("fetch", (e) => {
   const req = e.request;

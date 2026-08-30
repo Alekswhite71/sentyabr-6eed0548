@@ -113,7 +113,7 @@
   }
   .cover-dots{
     position:absolute;left:0;right:0;z-index:3;
-    bottom:calc(52px + env(safe-area-inset-bottom));
+    top:calc(16px + env(safe-area-inset-top));
     display:flex;justify-content:center;gap:6px;
     pointer-events:none;
   }
@@ -433,7 +433,7 @@
     <div class="sign">Люблю тебя.<br>До девятого сентября, моя Виктория.</div>
   </section>
 
-  <div class="credit">Сделано с любовью для одного человека.<br><span style="opacity:.7">обновление · v9</span></div>
+  <div class="credit">Сделано с любовью для одного человека.<br><span style="opacity:.7">обновление · v10</span></div>
 </main>
 
 <script>
@@ -456,7 +456,7 @@
     es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
   },{ threshold:.16, rootMargin:"0px 0px -6% 0px" });
 
-  /* плавная автокарусель на обложке */
+  /* автокарусель на обложке */
   (function(){
     const cover = document.getElementById("cover");
     const slider = document.getElementById("slider");
@@ -468,7 +468,8 @@
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let i = 0;
     let timer = null;
-    let paused = false;
+    let onScreen = true;
+    const INTERVAL = 3500;
 
     slides.forEach((_, n) => {
       const d = document.createElement("i");
@@ -483,39 +484,41 @@
       dots.forEach((d, k) => d.classList.toggle("on", k === i));
     }
 
-    function next(){ if(!paused) show(i + 1); }
+    function tick(){ if(onScreen && !document.hidden) show(i + 1); }
 
     function start(){
-      if(reduce || timer) return;
-      timer = setInterval(next, 4200);
+      if(reduce) return;
+      stop();
+      timer = setInterval(tick, INTERVAL);
     }
     function stop(){
       if(timer){ clearInterval(timer); timer = null; }
     }
 
-    const watch = new IntersectionObserver(es=>{
+    new IntersectionObserver(es=>{
       es.forEach(e=>{
-        if(e.isIntersecting){ paused = false; start(); }
-        else { paused = true; stop(); }
+        onScreen = e.isIntersecting;
+        if(onScreen) start(); else stop();
       });
-    },{ threshold:.2 });
-    watch.observe(cover);
+    },{ threshold:.15 }).observe(cover);
 
     let x0 = null;
     cover.addEventListener("touchstart", e=>{
       x0 = e.changedTouches[0].clientX;
-      stop();
     },{ passive:true });
     cover.addEventListener("touchend", e=>{
       if(x0 == null) return;
       const dx = e.changedTouches[0].clientX - x0;
       x0 = null;
-      if(Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1));
-      start();
+      if(Math.abs(dx) > 40){
+        show(i + (dx < 0 ? 1 : -1));
+        start();
+      }
     },{ passive:true });
 
     document.addEventListener("visibilitychange", ()=>{
-      if(document.hidden) stop(); else if(!paused) start();
+      if(document.hidden) stop();
+      else if(onScreen) start();
     });
 
     start();
@@ -664,7 +667,7 @@
       reloading = true;
       location.reload();
     });
-    navigator.serviceWorker.register("./sw.js?v=9", { updateViaCache: "none" })
+    navigator.serviceWorker.register("./sw.js?v=10", { updateViaCache: "none" })
       .then((r) => {
         swReg = r;
         r.update().catch(() => {});

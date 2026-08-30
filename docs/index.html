@@ -64,10 +64,18 @@
     display:flex;flex-direction:column;justify-content:flex-end;
     padding:0 26px calc(42px + env(safe-area-inset-bottom));
     overflow:hidden;
+    touch-action:pan-y;
   }
-  .cover-img{
-    position:absolute;inset:0;
-    background:#3a2028 center 32%/cover no-repeat;
+  .cover-slides{position:absolute;inset:0;background:#2a1520}
+  .cover-slides .slide{
+    position:absolute;inset:0;margin:0;opacity:0;
+    transition:opacity 1.4s ease;
+    pointer-events:none;
+  }
+  .cover-slides .slide.on{opacity:1;z-index:1}
+  .cover-slides .slide img{
+    display:block;width:100%;height:100%;
+    object-fit:cover;object-position:center 28%;
     transform:scale(1.04);
     animation:drift 28s ease-in-out infinite alternate;
   }
@@ -76,11 +84,11 @@
     to{transform:scale(1.1) translate(-1.5%,-1.5%)}
   }
   .cover::after{
-    content:"";position:absolute;inset:0;
+    content:"";position:absolute;inset:0;z-index:2;
     background:
       linear-gradient(180deg,rgba(42,21,32,.15) 0%,rgba(42,21,32,.08) 28%,rgba(42,21,32,.55) 62%,rgba(42,21,32,.92) 100%);
   }
-  .cover-in{position:relative;z-index:2;color:#fff}
+  .cover-in{position:relative;z-index:3;color:#fff}
   .cover .to{
     font-size:11px;letter-spacing:.28em;text-transform:uppercase;
     color:rgba(255,255,255,.85);font-weight:700;margin-bottom:14px;
@@ -103,6 +111,18 @@
     background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);
     backdrop-filter:blur(8px);padding:11px 18px;border-radius:999px;color:#fff;
   }
+  .cover-dots{
+    position:absolute;left:0;right:0;z-index:3;
+    bottom:calc(52px + env(safe-area-inset-bottom));
+    display:flex;justify-content:center;gap:6px;
+    pointer-events:none;
+  }
+  .cover-dots i{
+    width:6px;height:6px;border-radius:50%;
+    background:rgba(255,255,255,.35);
+    transition:transform .35s ease, background .35s ease;
+  }
+  .cover-dots i.on{background:#fff;transform:scale(1.25)}
   .scrollhint{
     position:absolute;left:50%;transform:translateX(-50%);
     bottom:calc(14px + env(safe-area-inset-bottom));z-index:3;
@@ -256,55 +276,7 @@
   }
   .tap .hint{margin-top:10px;font-size:12.5px;color:var(--soft)}
 
-  /* ── наши фото: плавная автокарусель ── */
-  .album{
-    position:relative;z-index:2;
-    padding:8px 20px 28px;
-  }
-  .album .k{
-    text-align:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-    color:var(--rose);font-weight:800;margin-bottom:8px;
-  }
-  .album .lead{
-    text-align:center;font-family:"Cormorant Garamond",serif;font-style:italic;
-    font-size:18px;color:var(--soft);margin-bottom:16px;line-height:1.4;
-  }
-  .slider{
-    position:relative;border-radius:22px;overflow:hidden;
-    box-shadow:0 14px 36px rgba(42,21,32,.16);
-    background:#2a1520;
-    aspect-ratio:3/4;
-    touch-action:pan-y;
-  }
-  .slide{
-    position:absolute;inset:0;
-    margin:0;opacity:0;
-    transition:opacity 1.35s ease;
-    pointer-events:none;
-  }
-  .slide.on{opacity:1;z-index:1}
-  .slide img{
-    display:block;width:100%;height:100%;object-fit:cover;object-position:center 28%;
-    background:#3a2028;
-  }
-  .slide .cap{
-    position:absolute;left:0;right:0;bottom:0;z-index:2;padding:56px 18px 18px;
-    background:linear-gradient(180deg,transparent,rgba(42,21,32,.78));
-    color:#fff;font-family:"Cormorant Garamond",serif;font-style:italic;
-    font-size:18px;line-height:1.3;text-shadow:0 2px 12px rgba(0,0,0,.45);
-  }
-  .dots{
-    position:absolute;left:0;right:0;bottom:10px;z-index:3;
-    display:flex;justify-content:center;gap:6px;padding:0 12px;
-    pointer-events:none;
-  }
-  .dots i{
-    width:6px;height:6px;border-radius:50%;
-    background:rgba(255,255,255,.35);
-    transition:transform .35s ease, background .35s ease;
-  }
-  .dots i.on{background:#fff;transform:scale(1.25)}
-  .slider:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+  /* альбом ниже убран — листание теперь на обложке */
 
   .phrases{
     position:relative;z-index:2;
@@ -366,9 +338,9 @@
     .ph p{font-size:22px}
   }
   @media (prefers-reduced-motion:reduce){
-    .fx,.cover-img{animation:none!important}
+    .fx,.cover-slides .slide img{animation:none!important}
     .ph{opacity:1;transform:none}
-    .slide{transition:none}
+    .cover-slides .slide{transition:none}
   }
 </style>
 </head>
@@ -376,14 +348,23 @@
 <div class="fx" id="fx" aria-hidden="true"></div>
 <main class="sheet">
 
-  <header class="cover">
-    <div class="cover-img" style="background-image:url('./photos/cover.jpg')"></div>
+  <header class="cover" id="cover">
+    <div class="cover-slides" id="slider" aria-roledescription="карусель" aria-label="Наши фотографии">
+      <figure class="slide on"><img src="./photos/cover.jpg" alt="" decoding="async" /></figure>
+      <figure class="slide"><img src="./photos/03-lake.jpg" alt="" loading="lazy" decoding="async" /></figure>
+      <figure class="slide"><img src="./photos/05-kiss.jpg" alt="" loading="lazy" decoding="async" /></figure>
+      <figure class="slide"><img src="./photos/01-tulips.jpg" alt="" loading="lazy" decoding="async" /></figure>
+      <figure class="slide"><img src="./photos/02-kiss-forehead.jpg" alt="" loading="lazy" decoding="async" /></figure>
+      <figure class="slide"><img src="./photos/06-mirror.jpg" alt="" loading="lazy" decoding="async" /></figure>
+      <figure class="slide"><img src="./photos/04-cat.jpg" alt="" loading="lazy" decoding="async" /></figure>
+    </div>
     <div class="cover-in">
       <div class="to">Виктории — от меня</div>
       <h1>Только<em>для тебя</em></h1>
       <p class="sub">Мы не виделись с мая. Просто листай — здесь только слова и ожидание.</p>
       <div class="dates">♥ 9 сентября 2026</div>
     </div>
+    <div class="cover-dots" id="dots" aria-hidden="true"></div>
     <div class="scrollhint">↓</div>
   </header>
 
@@ -431,42 +412,6 @@
     <p>А дальше — просто быть рядом. Всё остальное приложится.</p>
   </section>
 
-  <section class="album">
-    <div class="k">мы</div>
-    <p class="lead">Сами листаются. Можно просто смотреть.</p>
-    <div class="slider" id="slider" aria-roledescription="карусель" aria-label="Наши фотографии">
-      <figure class="slide on">
-        <img src="./photos/cover.jpg" alt="" decoding="async" />
-        <figcaption class="cap">мы</figcaption>
-      </figure>
-      <figure class="slide">
-        <img src="./photos/03-lake.jpg" alt="" loading="lazy" decoding="async" />
-        <figcaption class="cap">рядом — и этого достаточно</figcaption>
-      </figure>
-      <figure class="slide">
-        <img src="./photos/05-kiss.jpg" alt="" loading="lazy" decoding="async" />
-        <figcaption class="cap">закрыть глаза и ничего не объяснять</figcaption>
-      </figure>
-      <figure class="slide">
-        <img src="./photos/01-tulips.jpg" alt="" loading="lazy" decoding="async" />
-        <figcaption class="cap">тюльпаны, кухня и ты</figcaption>
-      </figure>
-      <figure class="slide">
-        <img src="./photos/02-kiss-forehead.jpg" alt="" loading="lazy" decoding="async" />
-        <figcaption class="cap">тихое «я здесь»</figcaption>
-      </figure>
-      <figure class="slide">
-        <img src="./photos/06-mirror.jpg" alt="" loading="lazy" decoding="async" />
-        <figcaption class="cap">наш обычный день — самый любимый</figcaption>
-      </figure>
-      <figure class="slide">
-        <img src="./photos/04-cat.jpg" alt="" loading="lazy" decoding="async" />
-        <figcaption class="cap">и этот рыжий свидетель нашей любви</figcaption>
-      </figure>
-      <div class="dots" id="dots" aria-hidden="true"></div>
-    </div>
-  </section>
-
   <button class="tap" id="tap" type="button">
     <div class="k">нажми</div>
     <h3>Слово для тебя</h3>
@@ -488,7 +433,7 @@
     <div class="sign">Люблю тебя.<br>До девятого сентября, моя Виктория.</div>
   </section>
 
-  <div class="credit">Сделано с любовью для одного человека.<br><span style="opacity:.7">обновление · август 2026</span></div>
+  <div class="credit">Сделано с любовью для одного человека.<br><span style="opacity:.7">обновление · v9</span></div>
 </main>
 
 <script>
@@ -513,10 +458,11 @@
 
   document.querySelectorAll(".shot").forEach(el => io.observe(el));
 
-  /* плавная автокарусель фото */
+  /* плавная автокарусель на обложке */
   (function(){
+    const cover = document.getElementById("cover");
     const slider = document.getElementById("slider");
-    if(!slider) return;
+    if(!slider || !cover) return;
     const slides = [...slider.querySelectorAll(".slide")];
     const dotsBox = document.getElementById("dots");
     if(slides.length < 2) return;
@@ -549,22 +495,20 @@
       if(timer){ clearInterval(timer); timer = null; }
     }
 
-    // пауза, пока карусель не на экране — батарея и спокойствие
     const watch = new IntersectionObserver(es=>{
       es.forEach(e=>{
         if(e.isIntersecting){ paused = false; start(); }
         else { paused = true; stop(); }
       });
-    },{ threshold:.35 });
-    watch.observe(slider);
+    },{ threshold:.2 });
+    watch.observe(cover);
 
-    // свайп пальцем
     let x0 = null;
-    slider.addEventListener("touchstart", e=>{
+    cover.addEventListener("touchstart", e=>{
       x0 = e.changedTouches[0].clientX;
       stop();
     },{ passive:true });
-    slider.addEventListener("touchend", e=>{
+    cover.addEventListener("touchend", e=>{
       if(x0 == null) return;
       const dx = e.changedTouches[0].clientX - x0;
       x0 = null;
@@ -575,6 +519,8 @@
     document.addEventListener("visibilitychange", ()=>{
       if(document.hidden) stop(); else if(!paused) start();
     });
+
+    start();
   })();
 
   const MEET = new Date("2026-09-09T12:00:00+03:00");
@@ -720,7 +666,7 @@
       reloading = true;
       location.reload();
     });
-    navigator.serviceWorker.register("./sw.js?v=8", { updateViaCache: "none" })
+    navigator.serviceWorker.register("./sw.js?v=9", { updateViaCache: "none" })
       .then((r) => {
         swReg = r;
         r.update().catch(() => {});
@@ -843,17 +789,6 @@
 
   refreshSetup();
   window.addEventListener("focus", refreshSetup);
-
-  const ci = document.querySelector(".cover-img");
-  let raf = null;
-  addEventListener("scroll",()=>{
-    if(raf) return;
-    raf = requestAnimationFrame(()=>{
-      const y = Math.min(scrollY, innerHeight);
-      ci.style.transform = `scale(1.06) translateY(${y*0.22}px)`;
-      raf = null;
-    });
-  },{ passive:true });
 </script>
 </body>
 </html>

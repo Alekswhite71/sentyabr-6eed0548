@@ -720,7 +720,7 @@
       reloading = true;
       location.reload();
     });
-    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
+    navigator.serviceWorker.register("./sw.js?v=8", { updateViaCache: "none" })
       .then((r) => {
         swReg = r;
         r.update().catch(() => {});

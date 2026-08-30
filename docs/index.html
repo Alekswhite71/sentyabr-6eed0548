@@ -457,6 +457,11 @@
     padding:18px 26px 28px;text-align:center;font-size:10px;line-height:1.6;
     color:rgba(255,255,255,.5);background:#6e2438;
   }
+  .credit .fresh{
+    appearance:none;border:0;background:none;padding:0;margin:0;
+    font:inherit;font-size:10px;color:rgba(255,255,255,.75);
+    text-decoration:underline;text-underline-offset:2px;cursor:pointer;
+  }
 
   @media (min-width:560px){
     .letter p{font-size:22px}
@@ -562,7 +567,10 @@
     <div class="sign">Люблю тебя.<br>До девятого сентября, моя Виктория.</div>
   </section>
 
-  <div class="credit">Сделано с любовью для одного человека.<br><span style="opacity:.7">обновление · v11</span></div>
+  <div class="credit">Сделано с любовью для одного человека.<br>
+    <span style="opacity:.7">обновление · v12</span>
+    · <button type="button" class="fresh" id="forceFresh">обновить открытку</button>
+  </div>
 </main>
 
 <script>
@@ -797,19 +805,52 @@
   let swReg = null;
   if ("serviceWorker" in navigator) {
     let reloading = false;
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
+    const reloadOnce = () => {
       if (reloading) return;
       reloading = true;
       location.reload();
-    });
-    navigator.serviceWorker.register("./sw.js?v=11", { updateViaCache: "none" })
+    };
+    navigator.serviceWorker.addEventListener("controllerchange", reloadOnce);
+
+    navigator.serviceWorker.register("./sw.js?v=12", { updateViaCache: "none" })
       .then((r) => {
         swReg = r;
-        r.update().catch(() => {});
+        const poke = () => r.update().catch(() => {});
+        poke();
+        setInterval(poke, 45_000);
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden) poke();
+        });
+        window.addEventListener("focus", poke);
+        r.addEventListener("updatefound", () => {
+          const w = r.installing;
+          if (!w) return;
+          w.addEventListener("statechange", () => {
+            if (w.state === "activated") reloadOnce();
+          });
+        });
         refreshSetup();
       })
       .catch(() => refreshSetup());
   }
+
+  document.getElementById("forceFresh")?.addEventListener("click", async () => {
+    const btn = document.getElementById("forceFresh");
+    if (btn) btn.textContent = "обновляю…";
+    try {
+      if ("serviceWorker" in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+      }
+      if (window.caches) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+      }
+    } catch (_) {}
+    const u = new URL(location.href);
+    u.searchParams.set("fresh", String(Date.now()));
+    location.replace(u.toString());
+  });
 
   function b64ToU8(base64){
     const pad = "=".repeat((4 - base64.length % 4) % 4);

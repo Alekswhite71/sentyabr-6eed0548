@@ -1,6 +1,6 @@
 /* Service worker: офлайн-кэш + приём ежедневных пуш-уведомлений. */
 
-const CACHE = "nash-sentyabr-v13";
+const CACHE = "nash-sentyabr-v14";
 
 // HTML и phrases.json НЕ кладём в предкэш — иначе на iPhone
 // после обновления сайта долго крутится старая открытка.

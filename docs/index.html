@@ -541,9 +541,9 @@
 
   <section class="letter">
     <p>Я очень долго считал эти дни. Сначала их было много, потом стало меньше, а теперь я знаю точное число — и оно наконец совсем маленькое.</p>
-    <p class="big">Девятого сентября ты встретишь меня в Ростове.</p>
-    <p>И <em>первые сутки мы не планировали</em>. Только ты, я и целый день, который никому не нужно ни с кем делить.</p>
-    <p>А дальше — просто быть рядом. Всё остальное приложится.</p>
+    <p class="big">Девятого сентября ты встретишь меня в Воронеже.</p>
+    <p>А потом — <em>домой, к тебе в Курск</em>. До тринадцатого сентября мы просто будем там: твой дом, твоя тишина и я рядом.</p>
+    <p>Без спешки. Без чужих планов. Только ты, я и первые дни, которые принадлежат нам.</p>
   </section>
 
   <button class="tap" id="tap" type="button">
@@ -568,7 +568,7 @@
   </section>
 
   <div class="credit">Сделано с любовью для одного человека.<br>
-    <span style="opacity:.7">обновление · v12</span>
+    <span style="opacity:.7">обновление · v13</span>
     · <button type="button" class="fresh" id="forceFresh">обновить открытку</button>
   </div>
 </main>
@@ -772,7 +772,7 @@
 
     const cd = daysUntilMeet();
     document.getElementById("cdTitle").textContent =
-      cd <= 0 ? "уже сегодня" : cd === 1 ? "уже завтра" : "9 сентября · Ростов";
+      cd <= 0 ? "уже сегодня" : cd === 1 ? "уже завтра" : "9 сентября · Воронеж";
 
     const ph = PHRASES[cd] || FAR[cd % FAR.length];
     const el = document.getElementById("todayPhrase");
@@ -812,7 +812,7 @@
     };
     navigator.serviceWorker.addEventListener("controllerchange", reloadOnce);
 
-    navigator.serviceWorker.register("./sw.js?v=12", { updateViaCache: "none" })
+    navigator.serviceWorker.register("./sw.js?v=13", { updateViaCache: "none" })
       .then((r) => {
         swReg = r;
         const poke = () => r.update().catch(() => {});

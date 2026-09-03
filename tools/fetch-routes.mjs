@@ -8,7 +8,8 @@ import { writeFileSync } from "node:fs";
 const OSRM = "https://router.project-osrm.org/route/v1/driving";
 
 const STOPS = {
-  rostov: [47.2357, 39.7015],
+  voronezh: [51.6608, 39.2003],
+  kursk: [51.7373, 36.1873],
   pyatigorsk: [44.0486, 43.0594],
   kislovodsk: [43.9053, 42.7168],
   dzhilisu: [43.433, 42.237],
@@ -19,16 +20,14 @@ const STOPS = {
   elista: [46.3078, 44.2558],
   volgograd: [48.7425, 44.537],
   borisoglebsk: [51.3669, 42.0747],
-  prokhorovka: [51.037, 36.748],
-  kursk: [51.7373, 36.1873],
   tula: [54.1931, 37.6173],
   yasna: [54.076, 37.526],
-  yeysk: [46.7106, 38.2773],
   gelendzhik: [44.5622, 38.0848],
 };
 
 const LEGS = [
-  ["rostov", "pyatigorsk"],
+  ["voronezh", "kursk"],
+  ["kursk", "pyatigorsk"],
   ["pyatigorsk", "kislovodsk"],
   ["kislovodsk", "dzhilisu"],
   ["dzhilisu", "kislovodsk"],
@@ -39,17 +38,13 @@ const LEGS = [
   ["chegem", "elista"],
   ["elista", "volgograd"],
   ["volgograd", "borisoglebsk"],
-  ["borisoglebsk", "prokhorovka"],
-  ["prokhorovka", "kursk"],
-  ["kursk", "tula"],
+  ["borisoglebsk", "tula"],
   ["tula", "yasna"],
-  ["rostov", "yeysk"],
-  ["yeysk", "rostov"],
   ["terskol", "gelendzhik"],
   ["gelendzhik", "terskol"],
 ];
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms) => new Promise((r) => setTimeout(r, 1200));
 
 function downsample(pts, max = 280) {
   if (pts.length <= max) return pts;
@@ -77,7 +72,6 @@ async function fetchLeg(from, to) {
   }
 
   const r = data.routes[0];
-  // GeoJSON: [lng, lat] → Leaflet: [lat, lng]
   const pts = r.geometry.coordinates.map(([lng, lat]) => [
     Math.round(lat * 1e5) / 1e5,
     Math.round(lng * 1e5) / 1e5,
@@ -106,7 +100,7 @@ for (const [from, to] of LEGS) {
     console.log(`ОШИБКА: ${e.message}`);
     out.legs[key] = { error: e.message, points: [STOPS[from], STOPS[to]] };
   }
-  await sleep(1200); // не долбим публичный сервер
+  await sleep(1200);
 }
 
 writeFileSync(
